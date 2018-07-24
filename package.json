@@ -1,0 +1,27 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "Notes",
+  "main": "index.js",
+  "devDependencies": {
+    "eslint": "^5.2.0",
+    "nodemon": "^1.18.3"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlyonaPavlova/Notes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlyonaPavlova/Notes/issues"
+  },
+  "homepage": "https://github.com/AlyonaPavlova/Notes#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mocha": "^5.2.0"
+  }
+}
