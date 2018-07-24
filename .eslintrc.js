@@ -20,7 +20,7 @@ module.exports = {
         "padded-blocks": ["error", "never"],
         "quotes": [
             "error",
-            "double"
+            "single"
         ],
         "semi": [
             "error",
