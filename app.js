@@ -1,10 +1,12 @@
 const express = require('express');
 const pages = require('./app/controllers/pages');
-
+const ejsLocals = require('ejs-locals');
 const app = express();
 
 app.set('views','./app/views');
+app.set('view options', { layout:'./app/views/layout.ejs' });
 app.set('view engine', 'ejs');
+app.engine('ejs', ejsLocals);
 app.use(express.static('/static'));
 
 app.use(function (req, res, next) {
