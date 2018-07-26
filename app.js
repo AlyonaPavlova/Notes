@@ -1,13 +1,13 @@
 const express = require('express');
 const pages = require('./app/controllers/pages');
-const ejsLocals = require('ejs-locals');
+const engine = require('ejs-mate');
 const app = express();
 
 app.set('views','./app/views');
 app.set('view options', { layout:'./app/views/layout.ejs' });
 app.set('view engine', 'ejs');
-app.engine('ejs', ejsLocals);
-app.use(express.static('/static'));
+app.engine('ejs', engine);
+app.use(express.static(__dirname + '/static'));
 
 app.use(function (req, res, next) {
     app.locals.route = req.url;
