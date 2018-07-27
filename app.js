@@ -7,7 +7,7 @@ app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
 app.set('view options', { layout:'./app/views/layout.ejs' });
-app.use(express.static(__dirname + '/static'));
+app.use('/static', express.static('static'));
 
 app.use(function (req, res, next) {
     app.locals.route = req.url;
