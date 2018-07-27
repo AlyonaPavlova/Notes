@@ -1,12 +1,12 @@
 const express = require('express');
-const pages = require('./app/controllers/pages');
 const engine = require('ejs-mate');
 const app = express();
+const pages = require(__dirname + '/app/controllers/pages');
 
-app.set('views','./app/views');
-app.set('view options', { layout:'./app/views/layout.ejs' });
-app.set('view engine', 'ejs');
 app.engine('ejs', engine);
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/app/views');
+app.set('view options', { layout:'./app/views/layout.ejs' });
 app.use(express.static(__dirname + '/static'));
 
 app.use(function (req, res, next) {
