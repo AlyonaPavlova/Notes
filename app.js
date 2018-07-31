@@ -46,11 +46,6 @@ app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 app.use(express.static(__dirname + '/static'));
 
-app.use(function (req, res, next) {
-    app.locals.route = req.url;
-    next();
-});
-
 app.get('/', function (req, res) { res.redirect('home');});
 app.get('/home', pages.home);
 app.get('/features', pages.features);
