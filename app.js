@@ -8,7 +8,6 @@ const engine = require('ejs-mate');
 const app = express();
 const pages = require(__dirname + '/app/controllers/pages');
 const port = process.env.PORT || 3000;
-// const users = [];
 
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
@@ -56,26 +55,6 @@ app.get('/', function (req, res) { res.redirect('home');});
 app.get('/home', pages.home);
 app.get('/features', pages.features);
 app.get('/news', pages.news);
-
-// app.post('/users', function (req, res) {
-//     const user = req.body;
-//     users.push({
-//         id: users.id,
-//         email: users.email,
-//         name: user.name,
-//         phone: users.phone,
-//         birthDate: users.birth_date,
-//         notesCount: users.notes_count
-//     });
-//     res.send('Successfully registered')
-// });
-
-// app.post('/users', function (req, res) {
-//     const user = req.body;
-//     fs.appendToFile('users.txt', JSON.stringify({name: user.name, age: user.age }), (err) => {
-//         res.send('Successfully registered')
-//     })
-// });
 
 app.listen(port, function () {
     console.log('App listening on port 3000!');
