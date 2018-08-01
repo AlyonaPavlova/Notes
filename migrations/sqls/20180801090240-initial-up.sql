@@ -1,4 +1,3 @@
--- Up
 PRAGMA foreign_keys = on;
 CREATE TABLE user (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -38,10 +37,3 @@ CREATE TABLE note_has_user_like (
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (note_id) REFERENCES note(id)
 );
-
--- Down
-DROP TABLE user
-DROP TABLE note
-DROP TABLE tag
-DROP TABLE note_has_tag
-DROP TABLE note_has_user_like;
