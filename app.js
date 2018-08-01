@@ -27,14 +27,14 @@ const dbPromise = Promise.resolve()
     .then(() => sqlite.open('./database.sqlite', { Promise }))
     .then(db => db.migrate({ force: 'last' }));
 
-app.get('/post/:id', async (req, res, next) => {
+app.get('/user/:id', async (req, res, next) => {
     try {
         const db = await dbPromise;
-        const [post, categories] = await Promise.all([
-            db.get('SELECT * FROM Post WHERE id = ?', req.params.id),
-            db.all('SELECT * FROM Category')
+        const [user, notes] = await Promise.all([
+            db.get('SELECT * FROM user WHERE id = ?', req.params.id),
+            db.all('SELECT * FROM note')
         ]);
-        res.render('post', { post, categories });
+        res.render('post', { user, notes });
     } catch (err) {
         next(err);
     }
