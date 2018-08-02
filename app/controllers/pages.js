@@ -6,13 +6,13 @@ exports.home = function (req, res) {
 
 exports.features = function (req, res) {
     res.render('pages/features', {
-        message: 'Features.'
+        message: 'Features'
     });
 };
 
 exports.news = function (req, res) {
     res.render('pages/news', {
-        message: 'News.'
+        message: 'News'
     });
 };
 

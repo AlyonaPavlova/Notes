@@ -21,24 +21,10 @@ app.use(function (req, res, next) {
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
-require('./app/routes');
+app.use(bodyParser.json());
 
-const dbPromise = Promise.resolve()
-    .then(() => sqlite.open('./database.sqlite', { Promise }))
-    .then(db => db.migrate({ force: 'last' }));
-
-app.get('/user/:id', async (req, res, next) => {
-    try {
-        const db = await dbPromise;
-        const [user, notes] = await Promise.all([
-            db.get('SELECT * FROM user WHERE id = ?', req.params.id),
-            db.all('SELECT * FROM note')
-        ]);
-        res.render('post', { user, notes });
-    } catch (err) {
-        next(err);
-    }
-});
+const dbPromise = sqlite.open('./database.sqlite', { Promise });
+// const dbPromise = sqlite.open('./database.sqlite', { cached: true });
 
 app.set('views','./app/views');
 app.set('view options', { layout:'./app/views/layout.ejs' });
@@ -55,5 +41,6 @@ app.listen(port, function () {
     console.log('App listening on port 3000!');
 });
 
-module.exports = app;
+module.exports = require(__dirname + './app/main');
+module.export = dbPromise;
 
