@@ -16,5 +16,20 @@ exports.news = function (req, res) {
     });
 };
 
+exports.registration = function (req, res) {
+    res.render('pages/registration', {
+        message: 'Registration'
+    });
+};
 
+exports.login = function (req, res) {
+    res.render('pages/login', {
+        message: 'Login'
+    });
+};
 
+exports.newNote = function (req, res) {
+    res.render('pages/newNote', {
+        message: 'Form for new note'
+    });
+};

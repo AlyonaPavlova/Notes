@@ -12,7 +12,7 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/app/views');
 app.set('view options', { layout:'./app/views/layout.ejs' });
 app.use('/static', express.static('static'));
-require('./app/controllers');
+require('./app/routes/index');
 
 app.use(function (req, res, next) {
     app.locals.route = req.url;

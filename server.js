@@ -1,4 +1,4 @@
-const app = require(__dirname + './app/main');
+const app = require(__dirname + './app');
 const port = process.env.PORT || 3000;
 
 app.listen(port, function () {
