@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const dbPromise = sqlite.open('./database.sqlite', { Promise });
-// const dbPromise = sqlite.open('./database.sqlite', { cached: true });
 
 app.set('views','./app/views');
 app.set('view options', { layout:'./app/views/layout.ejs' });

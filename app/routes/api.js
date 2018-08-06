@@ -1,7 +1,7 @@
 const express = require('express');
-const router = express.Router;
+const router = express.Router();
 
-const pages = require(__dirname + './app/controllers/pages');
+const pages = require('../controllers/pages');
 const Users = require('../controllers/usersController');
 const Notes = require('../controllers/notesController');
 const Tags = require('../controllers/tagsController');

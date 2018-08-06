@@ -1,7 +1,7 @@
 const express = require('express');
-const router = express.Router;
+const router = express.Router();
 
-const pages = require(__dirname + '/app/controllers/pages');
+const pages = require('../controllers/pages');
 
 router.get('/', function (req, res) { res.redirect('home');});
 router.get('/home', pages.home);
