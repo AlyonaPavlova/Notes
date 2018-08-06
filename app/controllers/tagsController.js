@@ -1,32 +1,44 @@
-class TagsController {
-    constructor() {
-        this.id = id;
-        this.body = body;
-    }
+const dbPromise = require('../../app');
+const Tags = require('../models/tags');
 
-    create(db, body, author_id) {
-        db.run('INSERT INTO note(body, author_id) VALUES ("' + body + '","' + author_id + '")');
-    }
-
-    readAllTags(db) {
-        db.all('SELECT * FROM note');
-    }
-
-    readTag(db, id) {
-        db.get('SELECT * FROM note WHERE id = ?', id);
-    }
-
-    readTagId(db, id) {
-        db.get('SELECT id FROM note WHERE id = ?', id);
-    }
-
-    update(db, body) {
-        db.run('UPDATE note SET body ="' + body);
-    }
-
-    delete(db, id) {
-        db.run('DELETE FROM note WHERE id = ?', id);
+async function create (req, res, next) {
+    try {
+        const db = await dbPromise;
+        Tags.create(db, req.body.body);
+        res.redirect('/api/v1/user/notes/:id/tags');
+    } catch (err) {
+        next(err);
     }
 }
 
-module.exports = TagsController;
+async function readAllTags (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const tags = Tags.readAllTags(db);
+        res.json(tags);
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function update (req, res, next) {
+    try {
+        const db = await dbPromise;
+        Tags.update(db, req.body.body);
+        res.redirect('/api/v1/user/notes/:id/tags');
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function deleteTag (req, res, next) {
+    try {
+        const db = await dbPromise;
+        Tags.delete(db, req.params.id);
+        res.redirect('/api/v1/user/notes/:id/tags');
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {create, readAllTags, update, deleteTag};

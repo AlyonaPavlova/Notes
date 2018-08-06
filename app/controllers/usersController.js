@@ -1,38 +1,54 @@
-class UsersController {
-    constructor() {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.phone = phone;
-        this.notes_count = notes_count;
-        this.birth_date = birth_date;
-    }
+const dbPromise = require('../../app');
+const Users = require('../models/users');
 
-    create(db, email, password, name, phone, birth_date) {
-        db.run('INSERT INTO user(id, email, password, name, phone, notes_count, birth_date) VALUES ("' + email + '","' +
-            password + '","' + name + '","' + phone + '","' + 0 + '","' + birth_date + '")');
-    }
-
-    readAllUsers(db) {
-        db.all('SELECT * FROM user');
-    }
-
-    readUser(db, id) {
-        db.get('SELECT * FROM user WHERE id = ?', id);
-    }
-
-    readUserId(db, id) {
-        db.get('SELECT id FROM user WHERE id = ?', id);
-    }
-
-    update(db, password, name, phone, birth_date) {
-        db.run('UPDATE user SET password ="' + password + '", name ="' + name + '", phone ="' + phone +'", birth_date ="' + birth_date);
-    }
-
-    delete(db, id) {
-        db.run('DELETE FROM user WHERE id = ?', id);
+async function create (req, res, next) {
+    try {
+        const db = await dbPromise;
+        Users.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+        res.redirect('api/v1/user/home');
+    } catch (err) {
+        next(err);
     }
 }
 
-module.exports = UsersController;
+async function readAllUsers (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const users = Users.readAllUsers(db);
+        res.json(users);
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function readUser (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const user = Users.readUser(db, req.params.id);
+        res.json(user);
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function update (req, res, next) {
+    try {
+        const db = await dbPromise;
+        Users.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+        res.redirect('api/v1/user/home');
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function deleteUser (req, res, next) {
+    try {
+        const db = await dbPromise;
+        Users.delete(db, req.params.id);
+        res.redirect('api/v1/home');
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {create, readAllUsers, readUser, update, deleteUser};

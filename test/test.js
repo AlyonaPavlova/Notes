@@ -24,7 +24,7 @@ describe('GET pages', function () {
 describe('Correct users returned', function () {
     it('should return users', function (t) {
         request(app)
-            .get('/api/v1/users')
+            .get('/api/v1/user/:id/users')
             .expect('Content-type', /json/)
             .expect(200)
             .end(function (err, res) {
