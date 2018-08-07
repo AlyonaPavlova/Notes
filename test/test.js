@@ -51,11 +51,13 @@ describe('Correct users returned', function () {
             .end(function (err, res) {
                 expect(res.body).to.have.property("email");
                 expect(res.body.email).to.not.equal(null);
+                expect(res.body.email).to.include("@");
                 expect(res.body).to.have.property("password");
                 expect(res.body.password).to.not.equal(null);
-                expect(res.body.password).to.include("@");
                 expect(res.body).to.have.property("name");
                 expect(res.body.name).to.not.equal(null);
+                expect(res.body).to.have.property("notes_count");
+                done();
             })
     });
 });

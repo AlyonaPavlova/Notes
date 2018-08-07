@@ -1,0 +1,456 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "Notes API",
+    "description" : "This is Notes API"
+  },
+  "servers" : [ {
+    "url" : "/api/v1"
+  } ],
+  "paths" : {
+    "/users" : {
+      "get" : {
+        "summary" : "Returns of all users",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Adds a new user",
+        "requestBody" : {
+          "description" : "Create a new user",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              },
+              "example" : {
+                "id" : 2,
+                "email" : "mail@mail.ru",
+                "password" : "0000",
+                "name" : "myName",
+                "phone" : 12345678,
+                "notes_count" : 0,
+                "birth_date" : "10.01.1990"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "User created successfully"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/{userId}" : {
+      "parameters" : [ {
+        "name" : "userId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the user to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      } ],
+      "get" : {
+        "summary" : "Returns a user by ID",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The specified user ID is invalid (e.g. not a number)"
+          },
+          "404" : {
+            "description" : "A user with the specified ID not found"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a user by ID",
+        "responses" : {
+          "400" : {
+            "description" : "Invalid user supplied"
+          },
+          "404" : {
+            "description" : "User not found"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a user by ID",
+        "responses" : {
+          "204" : {
+            "description" : "User was deleted"
+          }
+        }
+      }
+    },
+    "/notes" : {
+      "get" : {
+        "summary" : "Returns of all notes",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Note"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notes/{noteId}" : {
+      "parameters" : [ {
+        "name" : "noteId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the note to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      } ],
+      "get" : {
+        "summary" : "Returns a note by ID",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The specified note ID is invalid (e.g. not a number)"
+          },
+          "404" : {
+            "description" : "A note with the specified ID not found"
+          }
+        }
+      }
+    },
+    "/users/{userId}/notes" : {
+      "parameters" : [ {
+        "name" : "userId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the user to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      } ],
+      "get" : {
+        "summary" : "Returns of all notes",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Note"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Adds a new note",
+        "requestBody" : {
+          "description" : "Create a new note",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Note"
+              },
+              "example" : {
+                "id" : 2,
+                "body" : "body note",
+                "author_id" : 1,
+                "creation_date" : "7.08.2018",
+                "tags_count" : 5
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Note created successfully"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/{userId}/notes/{noteId}" : {
+      "parameters" : [ {
+        "name" : "userId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the user to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      }, {
+        "name" : "noteId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the note to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      } ],
+      "get" : {
+        "summary" : "Returns a note by ID",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "The specified note ID is invalid (e.g. not a number)"
+          },
+          "404" : {
+            "description" : "A note with the specified ID not found"
+          }
+        }
+      },
+      "put" : {
+        "summary" : "Updates a note by ID",
+        "responses" : {
+          "400" : {
+            "description" : "Invalid note supplied"
+          },
+          "404" : {
+            "description" : "Note not found"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a note by ID",
+        "responses" : {
+          "204" : {
+            "description" : "Note was deleted"
+          }
+        }
+      }
+    },
+    "/users/{userId}/notes/{noteId}/tags" : {
+      "parameters" : [ {
+        "name" : "userId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the user to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      }, {
+        "name" : "noteId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the note to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      } ],
+      "get" : {
+        "summary" : "Returns of all tags",
+        "responses" : {
+          "200" : {
+            "description" : "Successful response.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Tag"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Adds a new tag",
+        "requestBody" : {
+          "description" : "Create a new tag",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Tag"
+              },
+              "example" : {
+                "id" : 2,
+                "body" : "body tag"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Tag created successfully"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/users/{userId}/notes/{noteId}/tags/{tagId}" : {
+      "parameters" : [ {
+        "name" : "userId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the tag to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      }, {
+        "name" : "noteId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the tag to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      }, {
+        "name" : "tagId",
+        "in" : "path",
+        "required" : true,
+        "description" : "The ID of the tag to return",
+        "schema" : {
+          "type" : "integer"
+        }
+      } ],
+      "put" : {
+        "summary" : "Updates a tag by ID",
+        "responses" : {
+          "400" : {
+            "description" : "Invalid tag supplied"
+          },
+          "404" : {
+            "description" : "Tag not found"
+          }
+        }
+      },
+      "delete" : {
+        "summary" : "Deletes a tag by ID",
+        "responses" : {
+          "204" : {
+            "description" : "Tag was deleted"
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "phone" : {
+            "type" : "number"
+          },
+          "notes_count" : {
+            "type" : "integer"
+          },
+          "birth_date" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "Note" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "body" : {
+            "type" : "string"
+          },
+          "author_id" : {
+            "type" : "integer"
+          },
+          "creation_date" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "tags_count" : {
+            "type" : "integer"
+          }
+        }
+      },
+      "Tag" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "body" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}
