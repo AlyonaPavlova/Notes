@@ -5,7 +5,7 @@ async function create (req, res, next) {
     try {
         const db = await dbPromise;
         Users.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
-        res.redirect('api/v1/user/home');
+        res.redirect('api/v1/home');
     } catch (err) {
         next(err);
     }
@@ -35,7 +35,7 @@ async function update (req, res, next) {
     try {
         const db = await dbPromise;
         Users.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
-        res.redirect('api/v1/user/home');
+        res.redirect('api/v1/home');
     } catch (err) {
         next(err);
     }

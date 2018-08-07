@@ -5,7 +5,7 @@ async function create (req, res, next) {
     try {
         const db = await dbPromise;
         Tags.create(db, req.body.body);
-        res.redirect('/api/v1/user/notes/:id/tags');
+        res.redirect('/api/v1/users/:id/notes/:id/tags');
     } catch (err) {
         next(err);
     }
@@ -25,7 +25,7 @@ async function update (req, res, next) {
     try {
         const db = await dbPromise;
         Tags.update(db, req.body.body);
-        res.redirect('/api/v1/user/notes/:id/tags');
+        res.redirect('/api/v1/users/:id/notes/:id/tags');
     } catch (err) {
         next(err);
     }
@@ -35,7 +35,7 @@ async function deleteTag (req, res, next) {
     try {
         const db = await dbPromise;
         Tags.delete(db, req.params.id);
-        res.redirect('/api/v1/user/notes/:id/tags');
+        res.redirect('/api/v1/users/:id/notes/:id/tags');
     } catch (err) {
         next(err);
     }

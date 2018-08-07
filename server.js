@@ -5,3 +5,5 @@ const server  = require('http').createServer(app);
 module.exports = server.listen(port, function () {
     console.log('App listening on port 3000!');
 });
+
+server.close();

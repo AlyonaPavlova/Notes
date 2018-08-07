@@ -1,4 +1,6 @@
+const chai = require('chai');
 const expect = require('chai');
+const asserttype = require('chai-asserttype');
 const request = require('supertest');
 const app = require('../server');
 
@@ -31,7 +33,7 @@ describe('Correct users returned', function () {
 
     it('should return list of all users', function (done) {
         request(app)
-            .get('/api/v1/user/users')
+            .get('/api/v1/users')
             .expect('Content-type', /json/)
             .expect(200, done());
 
@@ -39,14 +41,14 @@ describe('Correct users returned', function () {
 
     it('should return a single user with id = 1', function (done) {
         request(app)
-            .get('/api/v1/user/1')
+            .get('/api/v1/users/1')
             .expect('Content-type', /json/)
             .expect(200, done());
     });
 
     it('should be an object with keys and values', function (done) {
         request(app)
-            .get('/api/v1/user/1')
+            .get('/api/v1/users/1')
             .expect(200)
             .end(function (err, res) {
                 expect(res.body).to.have.property("email");
@@ -56,30 +58,28 @@ describe('Correct users returned', function () {
                 expect(res.body.password).to.not.equal(null);
                 expect(res.body).to.have.property("name");
                 expect(res.body.name).to.not.equal(null);
+                expect(res.body).to.have.property("phone");
                 expect(res.body).to.have.property("notes_count");
-                done();
-            })
+                expect(res.body).to.have.property("birth_date");
+            });
+        done();
     });
 });
 
 describe('Non-existing user', function () {
     it('should return user not found', function (done) {
         request(app)
-            .get('/users/idisnonexisting')
+            .get('/users/302')
             .expect('Content-Type', /json/)
             .expect(404)
-            .expect('"User not found"')
-            .end((err) => {
-                if (err) return done(err);
-                done();
-            });
+            .expect('"User not found"', done());
     });
 });
 
 describe('Create user', function () {
     let data = {
         "id": "1",
-        "email": "admin@gmail.com",
+        "email": "admin@mail.ru",
         "password": "0000",
         "name": "Admin",
         "phone": "",
@@ -88,20 +88,16 @@ describe('Create user', function () {
     };
     it('respond with 201 created', function (done) {
         request(app)
-            .post('/api/v1/registration')
+            .post('/api/v1/users')
             .send(data)
             .expect('Content-Type', /json/)
-            .expect(201)
-            .end((err) => {
-                if (err) return done(err);
-                done();
-            });
+            .expect(201, done());
     });
 });
 
 describe('Create user error', function () {
     let data = {
-        "email": "admin@gmail.com",
+        "email": "admin@mail.ru",
         "password": "0000",
         "name": "Admin",
         "phone": "",
@@ -110,15 +106,48 @@ describe('Create user error', function () {
     };
     it('respond with 400 not created', function (done) {
         request(app)
-            .post('/api/v1/registration')
+            .post('/api/v1/users')
             .send(data)
             .expect('Content-Type', /json/)
             .expect(400)
-            .expect('"User not created"')
-            .end((err) => {
-                if (err) return done(err);
-                done();
+            .expect('"User not created"', done());
+    });
+});
+
+describe('Correct notes returned', function () {
+    this.timeout(5000);
+
+    it('should return list of all notes', function (done) {
+        request(app)
+            .get('/api/v1/notes')
+            .expect('Content-type', /json/)
+            .expect(200, done());
+
+    });
+
+    it('should return a single note with id = 1', function (done) {
+        request(app)
+            .get('/api/v1/notes/1')
+            .expect('Content-type', /json/)
+            .expect(200, done());
+    });
+
+    it('should be an object with keys and values', function (done) {
+        request(app)
+            .get('/api/v1/notes/1')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.body).to.have.property("body");
+                expect(res.body.body).to.not.equal(null);
+                expect(res.body).to.have.property("author_id");
+                expect(res.body.author_id).to.not.equal(null);
+                expect(res.body.author_id).to.be.a.number();
+                expect(res.body).to.have.property("creation_date");
+                expect(res.body.creation_date).to.not.equal(null);
+                expect(res.body.creation_date).to.be.date();
+                expect(res.body).to.have.property("tags_count");
             });
+        done();
     });
 });
 
