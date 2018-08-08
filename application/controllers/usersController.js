@@ -1,4 +1,4 @@
-const {dbPromise} = require('../../app');
+const {dbPromise} = require('../../application.js');
 const {User} = require('../models/users');
 
 async function create (req, res, next) {
