@@ -1,4 +1,4 @@
-const {dbPromise} = require('../../application.js');
+const {dbPromise} = require('../../db.js');
 const {User} = require('../models/users');
 
 async function create (req, res, next) {
@@ -14,8 +14,10 @@ async function create (req, res, next) {
 async function readAllUsers (req, res, next) {
     try {
         const db = await dbPromise;
-        const users = User.readAllUsers(db);
-        res.json(users);
+        const users = await Promise.all([
+            User.readAllUsers(db)
+        ]);
+        res.send(users);
     } catch (err) {
         next(err);
     }

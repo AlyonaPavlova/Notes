@@ -4,7 +4,7 @@ const asserttype = require('chai-asserttype');
 const request = require('supertest');
 const app = require('../server');
 
-const router = require('../app/routes/index');
+const router = require('../application/routes/index');
 
 describe('GET pages', function () {
     this.timeout(5000);
