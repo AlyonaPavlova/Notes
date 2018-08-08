@@ -5,6 +5,9 @@ const sqlite = require('sqlite');
 const bodyParser = require('body-parser');
 const engine = require('ejs-mate');
 
+const {router} = require('./app/routes/index');
+const {api} = require('./app/routes/api');
+
 const app = express();
 
 app.engine('ejs', engine);
@@ -21,8 +24,9 @@ app.use(function (req, res, next) {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(router, api);
 
-const dbPromise = sqlite.open('./database.sqlite', { Promise });
+const dbPromise = sqlite.open('./database.sqlite', Promise );
 
 app.set('views','./app/views');
 app.set('view options', { layout:'./app/views/layout.ejs' });
@@ -30,6 +34,5 @@ app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 app.use(express.static(__dirname + '/static'));
 
-module.exports = app;
-module.exports = dbPromise;
+module.exports = {app, dbPromise};
 

@@ -1,11 +1,11 @@
-const dbPromise = require('../../app');
-const Users = require('../models/users');
+const {dbPromise} = require('../../app');
+const {User} = require('../models/users');
 
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
-        Users.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
-        res.redirect('api/v1/home');
+        User.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+        res.redirect('/home');
     } catch (err) {
         next(err);
     }
@@ -14,7 +14,7 @@ async function create (req, res, next) {
 async function readAllUsers (req, res, next) {
     try {
         const db = await dbPromise;
-        const users = Users.readAllUsers(db);
+        const users = User.readAllUsers(db);
         res.json(users);
     } catch (err) {
         next(err);
@@ -24,7 +24,7 @@ async function readAllUsers (req, res, next) {
 async function readUser (req, res, next) {
     try {
         const db = await dbPromise;
-        const user = Users.readUser(db, req.params.id);
+        const user = User.readUser(db, req.params.id);
         res.json(user);
     } catch (err) {
         next(err);
@@ -34,8 +34,8 @@ async function readUser (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        Users.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
-        res.redirect('api/v1/home');
+        User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+        res.redirect('/home');
     } catch (err) {
         next(err);
     }
@@ -44,8 +44,8 @@ async function update (req, res, next) {
 async function deleteUser (req, res, next) {
     try {
         const db = await dbPromise;
-        Users.delete(db, req.params.id);
-        res.redirect('api/v1/home');
+        User.delete(db, req.params.id);
+        res.redirect('/home');
     } catch (err) {
         next(err);
     }

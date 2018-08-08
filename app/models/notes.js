@@ -1,4 +1,4 @@
-class NotesController {
+class Notes {
     constructor() {
         this.id = id;
         this.body = body;
@@ -32,4 +32,4 @@ class NotesController {
     }
 }
 
-module.exports = NotesController;
+module.exports = {Notes};

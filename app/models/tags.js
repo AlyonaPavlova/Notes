@@ -1,4 +1,4 @@
-class TagsController {
+class Tags {
     constructor() {
         this.id = id;
         this.body = body;
@@ -21,4 +21,4 @@ class TagsController {
     }
 }
 
-module.exports = TagsController;
+module.exports = {Tags};

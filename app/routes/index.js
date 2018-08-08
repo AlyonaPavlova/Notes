@@ -8,4 +8,4 @@ router.get('/home', pages.home);
 router.get('/features', pages.features);
 router.get('/news', pages.news);
 
-module.exports = router;
+module.exports = {router};

@@ -78,12 +78,12 @@ describe('Non-existing user', function () {
 
 describe('Create user', function () {
     let data = {
-        "id": "1",
+        "id": 1,
         "email": "admin@mail.ru",
         "password": "0000",
         "name": "Admin",
         "phone": "",
-        "notes_count": "0",
+        "notes_count": 0,
         "birth_date": ""
     };
     it('respond with 201 created', function (done) {
@@ -101,7 +101,7 @@ describe('Create user error', function () {
         "password": "0000",
         "name": "Admin",
         "phone": "",
-        "notes_count": "0",
+        "notes_count": 0,
         "birth_date": ""
     };
     it('respond with 400 not created', function (done) {
@@ -151,6 +151,57 @@ describe('Correct notes returned', function () {
     });
 });
 
+describe('Correct notes returned for one user', function () {
+    this.timeout(5000);
 
+    it('should return list of all notes for one user', function (done) {
+        request(app)
+            .get('/api/v1/users/:id/notes')
+            .expect('Content-type', /json/)
+            .expect(200, done());
+
+    });
+
+    it('should return a single note with id = 1', function (done) {
+        request(app)
+            .get('/api/v1/users/:id/notes/:id')
+            .expect('Content-type', /json/)
+            .expect(200, done());
+    });
+});
+
+describe('Create note', function () {
+    let data = {
+        "id": 1,
+        "body": "note's body",
+        "author_id": 1,
+        "creation_date": "",
+        "tags_count": 2
+    };
+    it('respond with 201 created', function (done) {
+        request(app)
+            .post('/api/v1/users/:id/notes')
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(201, done());
+    });
+});
+
+describe('Create note error', function () {
+    let data = {
+        "body": "note's body",
+        "author_id": 1,
+        "creation_date": "",
+        "tags_count": 2
+    };
+    it('respond with 400 not created', function (done) {
+        request(app)
+            .post('/api/v1/users/:id/notes')
+            .send(data)
+            .expect('Content-Type', /json/)
+            .expect(400)
+            .expect('"Note not created"', done());
+    });
+});
 
 

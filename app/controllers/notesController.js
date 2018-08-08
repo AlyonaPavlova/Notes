@@ -1,5 +1,5 @@
-const dbPromise = require('../../app');
-const Notes = require('../models/notes');
+const {dbPromise} = require('../../app');
+const {Notes} = require('../models/notes');
 
 async function create (req, res, next) {
     try {
