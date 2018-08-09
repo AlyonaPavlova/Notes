@@ -45,7 +45,7 @@ describe('GET requests', function () {
                         .expect('Content-type', /json/)
                         .expect(200)
                         .end(function (err, res) {
-                           expect(res.body).to.be.an('array', done(err));
+                            expect(res.body).to.be.an('array', done(err));
                         });
                 });
 
@@ -70,7 +70,7 @@ describe('GET requests', function () {
                             expect(res.body).to.have.property('birth_date');
                             expect(res.body.birth_date).to.equal(null);
                         });
-                        done();
+                    done();
                 });
             });
             describe('Non-existing user', function () {
@@ -111,7 +111,7 @@ describe('GET requests', function () {
                             expect(res.body.creation_date).to.be.date();
                             expect(res.body).to.have.property('tags_count');
                         });
-                        done();
+                    done();
                 });
             });
 
@@ -145,7 +145,20 @@ describe('GET requests', function () {
                 });
             });
         });
+        describe('Tags', function () {
+            describe('Correct tags returned', function () {
+                it('should return list of all tags', function (done) {
+                    request(app.listen())
+                        .get('/api/v1/notes/1/tags')
+                        .expect('Content-type', /json/)
+                        .expect(200)
+                        .end(function (err, res) {
+                            expect(res.body).to.be.an('array', done(err));
+                        });
+                });
+            });
 
+        });
     });
 });
 
@@ -210,6 +223,19 @@ describe('POST requests', function () {
             });
         });
     });
+    describe('Tags', function () {
+        describe('Create tag', function () {
+            let data = {
+                "body": "bodyTag"
+            };
+            it('respond with 201 created', function (done) {
+                request(app.listen())
+                    .post('/api/v1/users/:id/notes/:id/tags')
+                    .send(data)
+                    .expect(201, done);
+            });
+        });
+    });
 });
 
 describe('PUT requests', function () {
@@ -245,6 +271,20 @@ describe('PUT requests', function () {
             });
         });
     });
+
+    describe('Tags', function () {
+        describe('Update tag', function () {
+            let data = {
+                "body": "newBody"
+            };
+            it('respond with 200 updated', function (done) {
+                request(app.listen())
+                    .put('/api/v1/users/:id/notes/:id/tags/1')
+                    .send(data)
+                    .expect(200, done);
+            });
+        });
+    });
 });
 
 describe('DELETE requests', function () {
@@ -263,6 +303,16 @@ describe('DELETE requests', function () {
             it('respond with 200 deleted', function (done) {
                 request(app.listen())
                     .delete('/api/v1/users/1/notes/1')
+                    .expect(200, done);
+            });
+        });
+    });
+
+    describe('Tags', function () {
+        describe('Delete tag', function () {
+            it('respond with 200 deleted', function (done) {
+                request(app.listen())
+                    .delete('/api/v1/users/:id/notes/:id/tags/1')
                     .expect(200, done);
             });
         });

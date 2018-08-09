@@ -20,7 +20,9 @@ CREATE TABLE note (
 
 CREATE TABLE tag (
   id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-  body TEXT NOT NULL
+  body TEXT NOT NULL,
+  note_id INTEGER NOT NULL,
+  FOREIGN KEY (note_id) REFERENCES note(id)
 );
 
 CREATE TABLE note_has_tag (

@@ -1,24 +1,24 @@
-class Tags {
+class Tag {
     constructor() {
         this.id = id;
         this.body = body;
     }
 
     static create(db, body) {
-        db.run('INSERT INTO note(body, author_id) VALUES ("' + body + '")');
+        db.run('INSERT INTO tag(body) VALUES ("' + body + '")');
     }
 
-    static readAllTags(db) {
-        db.all('SELECT * FROM tag');
+    static readAllTags(db, note_id) {
+        return db.all('SELECT * FROM tag WHERE note_id = ?', note_id);
     }
 
-    static update(db, body) {
-        db.run('UPDATE note SET body ="' + body);
+    static update(db, body, id) {
+        db.run('UPDATE tag SET body ="' + body + '" WHERE id = ?', id);
     }
 
     static delete(db, id) {
-        db.run('DELETE FROM note WHERE id = ?', id);
+        db.run('DELETE FROM tag WHERE id = ?', id);
     }
 }
 
-module.exports = {Tags};
+module.exports = {Tag};

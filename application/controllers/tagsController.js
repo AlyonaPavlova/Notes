@@ -1,11 +1,19 @@
-const {dbPromise} = require('../../app');
-const {Tags} = require('../models/tags');
+const {dbPromise} = require('../../db.js');
+const {Tag} = require('../models/tags');
 
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
-        Tags.create(db, req.body.body);
-        res.redirect('/api/v1/users/:id/notes/:id/tags');
+
+        if (!req.body.body) {
+            res.status(400);
+            res.send('400: Note Not Created');
+        }
+        else {
+            const tag = await Tag.create(db, req.body.body);
+            res.status(201);
+            res.send(tag);
+        }
     } catch (err) {
         next(err);
     }
@@ -14,8 +22,8 @@ async function create (req, res, next) {
 async function readAllTags (req, res, next) {
     try {
         const db = await dbPromise;
-        const tags = Tags.readAllTags(db);
-        res.json(tags);
+        const tags = Tag.readAllTags(db);
+        res.send(tags);
     } catch (err) {
         next(err);
     }
@@ -24,8 +32,8 @@ async function readAllTags (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        Tags.update(db, req.body.body);
-        res.redirect('/api/v1/users/:id/notes/:id/tags');
+        const tag = Tag.update(db, req.body.body, req.params.id);
+        res.send(tag);
     } catch (err) {
         next(err);
     }
@@ -34,8 +42,8 @@ async function update (req, res, next) {
 async function deleteTag (req, res, next) {
     try {
         const db = await dbPromise;
-        Tags.delete(db, req.params.id);
-        res.redirect('/api/v1/users/:id/notes/:id/tags');
+        await Tag.delete(db, req.params.id);
+        res.send('Tag has been deleted');
     } catch (err) {
         next(err);
     }
