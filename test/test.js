@@ -117,7 +117,7 @@ describe('GET requests', function () {
 
             describe('Correct notes returned for one user', function () {
                 it('should return list of all notes for one user', function (done) {
-                    equest(app.listen())
+                    request(app.listen())
                         .get('/api/v1/users/1/notes')
                         .expect('Content-type', /json/)
                         .expect(200)
@@ -137,10 +137,8 @@ describe('GET requests', function () {
                             expect(res.body.body).to.not.equal(null);
                             expect(res.body).to.have.property('author_id');
                             expect(res.body.author_id).to.not.equal(null);
-                            expect(res.body.author_id).to.be.a.number();
                             expect(res.body).to.have.property('creation_date');
                             expect(res.body.creation_date).to.not.equal(null);
-                            expect(res.body.creation_date).to.be.date();
                             expect(res.body).to.have.property('tags_count');
                         });
                     done();
@@ -214,6 +212,61 @@ describe('POST requests', function () {
     });
 });
 
+describe('PUT requests', function () {
+    this.timeout(5000);
 
+    describe('Users', function () {
+        describe('Update user', function () {
+            let data = {
+                "password": "newPassword",
+                "name": "newName",
+                "phone": "newPhone",
+                "birth_date": "newDate"
+            };
+            it('respond with 200 updated', function (done) {
+                request(app.listen())
+                    .put('/api/v1/users/2')
+                    .send(data)
+                    .expect(200, done);
+            });
+        });
+    });
+
+    describe('Notes', function () {
+        describe('Update note', function () {
+            let data = {
+                "body": "newBody"
+            };
+            it('respond with 200 updated', function (done) {
+                request(app.listen())
+                    .put('/api/v1/users/:id/notes/1')
+                    .send(data)
+                    .expect(200, done);
+            });
+        });
+    });
+});
+
+describe('DELETE requests', function () {
+    describe('Users', function () {
+        describe('Delete user', function () {
+            it('respond with 200 deleted', function (done) {
+                request(app.listen())
+                    .delete('/api/v1/users/2')
+                    .expect(200, done);
+            });
+        });
+    });
+
+    describe('Notes', function () {
+        describe('Delete note', function () {
+            it('respond with 200 deleted', function (done) {
+                request(app.listen())
+                    .delete('/api/v1/users/1/notes/1')
+                    .expect(200, done);
+            });
+        });
+    });
+});
 
 

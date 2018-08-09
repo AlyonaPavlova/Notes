@@ -8,7 +8,7 @@ class Note {
     }
 
     static create(db, body, author_id, date) {
-        return db.run('INSERT INTO note(body, author_id, creation_date) VALUES ("' + body + '","' + author_id + '","' + date + '")');
+        db.run('INSERT INTO note(body, author_id, creation_date) VALUES ("' + body + '","' + author_id + '","' + date + '")');
     }
 
     static readAllNotes(db) {
@@ -23,12 +23,12 @@ class Note {
         return db.get('SELECT * FROM note WHERE id = ?', id);
     }
 
-    static update(db, body) {
-        return db.run('UPDATE note SET body ="' + body);
+    static update(db, body, id) {
+        db.run('UPDATE note SET body ="' + body + '" WHERE id = ?', id);
     }
 
     static delete(db, id) {
-        return db.run('DELETE FROM note WHERE id = ?', id);
+        db.run('DELETE FROM note WHERE id = ?', id);
     }
 }
 

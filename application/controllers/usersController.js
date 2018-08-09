@@ -47,8 +47,13 @@ async function readUser (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
-        res.redirect('/home');
+        const user = await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date, req.params.id);
+
+        if (!user) {
+            res.status(404);
+            res.send('404: User Not Found');
+        }
+        res.send(user);
     } catch (err) {
         next(err);
     }
@@ -58,7 +63,7 @@ async function deleteUser (req, res, next) {
     try {
         const db = await dbPromise;
         await User.delete(db, req.params.id);
-        res.redirect('/home');
+        res.send('You are removed from the system!');
     } catch (err) {
         next(err);
     }

@@ -22,12 +22,13 @@ class User {
         return db.get('SELECT * FROM user WHERE id = ?', id);
     }
 
-    static update(db, password, name, phone, birth_date) {
-        return db.run('UPDATE user SET password ="' + password + '", name ="' + name + '", phone ="' + phone +'", birth_date ="' + birth_date);
+    static update(db, password, name, phone, birth_date, id) {
+        db.run('UPDATE user SET password ="' + password + '", name ="' + name + '", phone ="' + phone +
+            '", birth_date ="' + birth_date + '" WHERE id = ?', id);
     }
 
     static delete(db, id) {
-        return db.run('DELETE FROM user WHERE id = ?', id);
+        db.run('DELETE FROM user WHERE id = ?', id);
     }
 }
 

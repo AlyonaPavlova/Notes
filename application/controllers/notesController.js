@@ -61,8 +61,13 @@ async function readNote (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        await Note.update(db, req.body.body);
-        res.redirect('/api/v1/user/notes/:id');
+        const note = await Note.update(db, req.body.body, req.params.id);
+
+        if (!note) {
+            res.status(404);
+            res.send('404: Note Not Found');
+        }
+        res.send(note);
     } catch (err) {
         next(err);
     }
@@ -72,7 +77,7 @@ async function deleteNote (req, res, next) {
     try {
         const db = await dbPromise;
         await Note.delete(db, req.params.id);
-        res.redirect('/api/v1/user/notes');
+        res.send('Your note has been deleted!');
     } catch (err) {
         next(err);
     }
