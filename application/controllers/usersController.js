@@ -4,8 +4,16 @@ const {User} = require('../models/users');
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
-        User.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
-        res.redirect('/home');
+
+        if (!req.body.email || !req.body.password || !req.body.name) {
+            res.status(400);
+            res.send('400: User Not Created');
+        }
+        else {
+            const user = await User.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+            res.status(201);
+            res.send(user);
+        }
     } catch (err) {
         next(err);
     }
@@ -14,9 +22,7 @@ async function create (req, res, next) {
 async function readAllUsers (req, res, next) {
     try {
         const db = await dbPromise;
-        const users = await Promise.all([
-            User.readAllUsers(db)
-        ]);
+        const users = await User.readAllUsers(db);
         res.send(users);
     } catch (err) {
         next(err);
@@ -26,8 +32,13 @@ async function readAllUsers (req, res, next) {
 async function readUser (req, res, next) {
     try {
         const db = await dbPromise;
-        const user = User.readUser(db, req.params.id);
-        res.json(user);
+        const user = await User.readUser(db, req.params.id);
+
+        if (!user) {
+            res.status(404);
+            res.send('404: User Not Found');
+        }
+        res.send(user);
     } catch (err) {
         next(err);
     }
@@ -36,7 +47,7 @@ async function readUser (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+        await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
         res.redirect('/home');
     } catch (err) {
         next(err);
@@ -46,7 +57,7 @@ async function update (req, res, next) {
 async function deleteUser (req, res, next) {
     try {
         const db = await dbPromise;
-        User.delete(db, req.params.id);
+        await User.delete(db, req.params.id);
         res.redirect('/home');
     } catch (err) {
         next(err);

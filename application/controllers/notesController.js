@@ -1,11 +1,23 @@
-const {dbPromise} = require('../../app');
-const {Notes} = require('../models/notes');
+const {dbPromise} = require('../../db.js');
+const {Note} = require('../models/notes');
+
+const datetime = require('node-datetime');
+const past = '2015-01-01 00:00:00';
+const pastDateTime = datetime.create(past);
 
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
-        Notes.create(db, req.body.body, req.params.id);
-        res.redirect('/api/v1/user/note/:id');
+
+        if (!req.body.body) {
+            res.status(400);
+            res.send('400: Note Not Created');
+        }
+        else {
+            const note = await Note.create(db, req.body.body, req.params.id, pastDateTime.now());
+            res.status(201);
+            res.send(note);
+        }
     } catch (err) {
         next(err);
     }
@@ -14,8 +26,8 @@ async function create (req, res, next) {
 async function readAllNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = Notes.readAllNotes(db);
-        res.json(notes);
+        const notes = await Note.readAllNotes(db);
+        res.send(notes);
     } catch (err) {
         next(err);
     }
@@ -24,8 +36,8 @@ async function readAllNotes (req, res, next) {
 async function readPersonalNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = Notes.readPersonalNotes(db, req.params.id);
-        res.json(notes);
+        const notes = await Note.readPersonalNotes(db, req.params.id);
+        res.send(notes);
     } catch (err) {
         next(err);
     }
@@ -34,8 +46,13 @@ async function readPersonalNotes (req, res, next) {
 async function readNote (req, res, next) {
     try {
         const db = await dbPromise;
-        const note = Notes.readNote(db, req.params.id);
-        res.json(note);
+        const note = await Note.readNote(db, req.params.id);
+
+        if (!note) {
+            res.status(404);
+            res.send('404: Note Not Found');
+        }
+        res.send(note);
     } catch (err) {
         next(err);
     }
@@ -44,7 +61,7 @@ async function readNote (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        Notes.update(db, req.body.body);
+        await Note.update(db, req.body.body);
         res.redirect('/api/v1/user/notes/:id');
     } catch (err) {
         next(err);
@@ -54,7 +71,7 @@ async function update (req, res, next) {
 async function deleteNote (req, res, next) {
     try {
         const db = await dbPromise;
-        Notes.delete(db, req.params.id);
+        await Note.delete(db, req.params.id);
         res.redirect('/api/v1/user/notes');
     } catch (err) {
         next(err);

@@ -23,11 +23,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(router, api);
 
+
 app.set('views','./application/views');
 app.set('view options', { layout:'./application/views/layout.ejs' });
 app.set('view engine', 'ejs');
 app.engine('ejs', engine);
 app.use(express.static(__dirname + '/static'));
+
+app.use(function(req, res) {
+    res.status(404);
+    res.send('404: Not Found');
+});
 
 module.exports = {app};
 
