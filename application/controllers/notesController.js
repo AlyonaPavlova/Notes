@@ -62,11 +62,6 @@ async function update (req, res, next) {
     try {
         const db = await dbPromise;
         const note = await Note.update(db, req.body.body, req.params.id);
-
-        if (!note) {
-            res.status(404);
-            res.send('404: Note Not Found');
-        }
         res.send(note);
     } catch (err) {
         next(err);

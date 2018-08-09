@@ -4,8 +4,8 @@ class Tag {
         this.body = body;
     }
 
-    static create(db, body) {
-        db.run('INSERT INTO tag(body) VALUES ("' + body + '")');
+    static create(db, body, note_id) {
+        db.run('INSERT INTO tag(body, note_id) VALUES ("' + body + '","' + note_id + '")');
     }
 
     static readAllTags(db, note_id) {

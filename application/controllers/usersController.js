@@ -48,11 +48,6 @@ async function update (req, res, next) {
     try {
         const db = await dbPromise;
         const user = await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date, req.params.id);
-
-        if (!user) {
-            res.status(404);
-            res.send('404: User Not Found');
-        }
         res.send(user);
     } catch (err) {
         next(err);

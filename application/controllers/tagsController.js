@@ -10,7 +10,7 @@ async function create (req, res, next) {
             res.send('400: Note Not Created');
         }
         else {
-            const tag = await Tag.create(db, req.body.body);
+            const tag = await Tag.create(db, req.body.body, req.params.id);
             res.status(201);
             res.send(tag);
         }
