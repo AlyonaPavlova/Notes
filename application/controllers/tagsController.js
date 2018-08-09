@@ -22,7 +22,7 @@ async function create (req, res, next) {
 async function readAllTags (req, res, next) {
     try {
         const db = await dbPromise;
-        const tags = Tag.readAllTags(db);
+        const tags = await Tag.readAllTags(db, req.params.id);
         res.send(tags);
     } catch (err) {
         next(err);

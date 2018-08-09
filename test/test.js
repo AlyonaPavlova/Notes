@@ -1,6 +1,5 @@
 const chai = require('chai');
 const expect = chai.expect;
-const asserttype = require('chai-asserttype');
 const request = require('supertest');
 const {app} = require('../app');
 
@@ -149,7 +148,7 @@ describe('GET requests', function () {
             describe('Correct tags returned', function () {
                 it('should return list of all tags', function (done) {
                     request(app.listen())
-                        .get('/api/v1/notes/1/tags')
+                        .get('/api/v1/users/1/notes/1/tags')
                         .expect('Content-type', /json/)
                         .expect(200)
                         .end(function (err, res) {

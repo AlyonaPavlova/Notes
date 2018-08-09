@@ -41,6 +41,5 @@ api.route('/api/v1/users/:id/notes/:id/tags/:id')
 
 api.get('/api/v1/notes', Notes.readAllNotes);
 api.get('/api/v1/notes/:id', Notes.readNote);
-api.get('/api/v1/notes/:id/tags', Tags.readAllTags);
 
 module.exports = {api};
