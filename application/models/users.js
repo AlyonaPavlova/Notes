@@ -30,6 +30,10 @@ class User {
     static delete(db, id) {
         db.run('DELETE FROM user WHERE id = ?', id);
     }
+
+    static find(db, email) {
+        db.run('SELECT * FROM user WHERE email = ?', email);
+    }
 }
 
 module.exports = {User};

@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt-nodejs');
+
 const {dbPromise} = require('../../db.js');
 const {User} = require('../models/users');
 
@@ -10,7 +12,13 @@ async function create (req, res, next) {
             res.send('400: User Not Created');
         }
         else {
-            const user = await User.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+            const hashedPassword = await new Promise((resolve, reject) => {
+                bcrypt.hash(req.body.password, 10, function(err, hash) {
+                    if (err) reject(err);
+                    resolve(hash);
+                });
+            });
+            const user = await User.create(db, req.body.email, hashedPassword, req.body.name, req.body.phone, req.body.birth_date);
             res.status(201);
             res.send(user);
         }
@@ -64,4 +72,30 @@ async function deleteUser (req, res, next) {
     }
 }
 
-module.exports = {create, readAllUsers, readUser, update, deleteUser};
+// async function findUser (req, res, next, email, cb) {
+//     try {
+//         const db = await dbPromise;
+//         const user = await User.find(db, req.body.email);
+//
+//         if (email === user.req.body.email) {
+//             return cb(null, user)
+//         }
+//         return callback(null);
+//
+//         res.send(user);
+//     } catch (err) {
+//         next(err);
+//     }
+// }
+
+async function findUser (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const user = await User.find(db, req.body.email);
+        res.send(user);
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {create, readAllUsers, readUser, update, deleteUser, findUser};
