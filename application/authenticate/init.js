@@ -4,21 +4,16 @@ const authenticationMiddleware = require('../authenticate/middleware');
 
 const Users = require('../controllers/usersController');
 
-
-
 // const user = async function () {
 //     await Users.findUser();
 // };
 
 const user = {
     email: "admin@mail.ru",
-    password: "0000",
-    id: 1
+    password: "0000"
 };
 
 function findUser(email, callback) {
-    console.log("find");
-
     if (email === user.email) {
         return callback(null, user)
     }
@@ -43,7 +38,7 @@ module.exports = function (passport) {
         passReqToCallback : true
     },
         (req, email, password, done) => {
-            findUser({ 'local.email' :  email }, (err, user) => {
+            findUser(email, (err, user) => {
                 if (err) {
                     return done(err)
                 }
