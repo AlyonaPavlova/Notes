@@ -12,7 +12,7 @@ describe('GET requests', function () {
                 .get('/home')
                 .expect(200)
                 .end(function (err, res) {
-                    expect(res.text).to.include("Храните ваши заметки у нас. Легко и просто!");
+                    expect(res.text).to.include('Храните ваши заметки у нас. Легко и просто!');
                     done(err);
                 });
         });
@@ -22,7 +22,7 @@ describe('GET requests', function () {
                 .get('/features')
                 .expect(200)
                 .end(function (err, res) {
-                    expect(res.text).to.include("Features");
+                    expect(res.text).to.include('Features');
                     done(err);
                 });
         });
@@ -32,7 +32,7 @@ describe('GET requests', function () {
                 .get('/news')
                 .expect(200)
                 .end(function (err, res) {
-                    expect(res.text).to.include("News");
+                    expect(res.text).to.include('News');
                     done(err);
                 });
         });
@@ -320,6 +320,19 @@ describe('DELETE requests', function () {
                     .expect(200, done);
             });
         });
+    });
+});
+
+describe('Authentication', function () {
+    it('should return login page', function (done) {
+        request(app)
+            .get('/login')
+            .expect('Content-type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.text).to.include('Login');
+                done(err);
+            });
     });
 });
 

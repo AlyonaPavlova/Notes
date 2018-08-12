@@ -23,7 +23,7 @@ module.exports = async function (passport) {
         await findUser(email, cb);
     });
 
-    passport.use(new LocalStrategy({
+    passport.use('local-login', new LocalStrategy({
         usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true
@@ -42,6 +42,5 @@ module.exports = async function (passport) {
             return done(null, user);
         });
     }));
-
     passport.authenticationMiddleware = authenticationMiddleware;
 };

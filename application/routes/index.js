@@ -15,7 +15,7 @@ router.route('/login')
         res.render('pages/login.ejs', {message: req.flash('loginMessage') });
     })
     .post(
-        passport.authenticate('local', {
+        passport.authenticate('local-login', {
             successRedirect: '/',
             failureRedirect: '/login',
             failureFlash: true })
@@ -27,7 +27,7 @@ router.route('/signup')
     })
     .post(
         passport.authenticate('local-signup', {
-            successRedirect: '/profile',
+            successRedirect: '/',
             failureRedirect: '/signup',
             failureFlash: true })
     );
@@ -42,6 +42,5 @@ router.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
-
 
 module.exports = {router};
