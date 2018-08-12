@@ -32,7 +32,7 @@ class User {
     }
 
     static find(db, email) {
-        db.run('SELECT * FROM user WHERE email = ?', email);
+        return db.get('SELECT * FROM user WHERE email = ?', email);
     }
 }
 

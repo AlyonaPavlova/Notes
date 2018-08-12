@@ -72,29 +72,12 @@ async function deleteUser (req, res, next) {
     }
 }
 
-// async function findUser (req, res, next, email, cb) {
-//     try {
-//         const db = await dbPromise;
-//         const user = await User.find(db, req.body.email);
-//
-//         if (email === user.req.body.email) {
-//             return cb(null, user)
-//         }
-//         return callback(null);
-//
-//         res.send(user);
-//     } catch (err) {
-//         next(err);
-//     }
-// }
-
-async function findUser (req, res, next) {
+async function findUser (email) {
     try {
         const db = await dbPromise;
-        const user = await User.find(db, req.body.email);
-        res.send(user);
+        return await User.find(db, email);
     } catch (err) {
-        next(err);
+        return err;
     }
 }
 

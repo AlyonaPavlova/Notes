@@ -10,18 +10,16 @@ router.get('/home', pages.home);
 router.get('/features', pages.features);
 router.get('/news', pages.news);
 
-    router.route('/login')
-        .get(function (req, res) {
-            res.render('pages/login.ejs', {message: req.flash('loginMessage') });
-        })
-        .post(
-            passport.authenticate('local', {
-                successRedirect: '/',
-                failureRedirect: '/login',
-                failureFlash: true })
-        );
-
-
+router.route('/login')
+    .get(function (req, res) {
+        res.render('pages/login.ejs', {message: req.flash('loginMessage') });
+    })
+    .post(
+        passport.authenticate('local', {
+            successRedirect: '/',
+            failureRedirect: '/login',
+            failureFlash: true })
+    );
 
 router.route('/signup')
     .get(function (req, res) {
