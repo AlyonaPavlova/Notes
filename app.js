@@ -34,7 +34,7 @@ app.use(session({
     store: new RedisStore({
         url: config.redisStore.url
     }),
-    secret: config.redisStore.secret,
+    secret: 'cat',
     resave: false,
     saveUninitialized: false
 }));

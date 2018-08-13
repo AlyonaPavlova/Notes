@@ -1,5 +1,8 @@
 const chai = require('chai');
 const expect = chai.expect;
+const superagent = require('superagent');
+// const agent = require('superagent-wrapper');
+// const request = require('superagent');
 const request = require('supertest');
 const {app} = require('../app');
 
@@ -327,11 +330,53 @@ describe('Authentication', function () {
     it('should return login page', function (done) {
         request(app)
             .get('/login')
-            .expect('Content-type', /json/)
+            .expect('Content-type', 'text/html; charset=utf-8')
             .expect(200)
             .end(function (err, res) {
                 expect(res.text).to.include('Login');
                 done(err);
+            });
+    });
+
+    it('should redirect to "/"', function (done) {
+       request(app)
+           .post('/login')
+           .field('email', 'admin@mail.ru')
+           .field('password', '0000')
+           .end(function (err) {
+               expect('Location', '/');
+               done(err);
+           });
+
+    });
+
+    it('should contain text "Oops! Wrong password." and redirect to "/login"', function (done) {
+        const agent = superagent.agent(app);
+
+            agent.post('http://localhost:3000/login')
+                .type('form')
+                .query({'email': 'admin@mail.ru', 'password': '1111'})
+                .then(res => {
+                    expect(res.text).to.include('Oops! Wrong password.');
+                    done();
+                })
+                .catch(err => {
+                    throw err;
+                });
+        });
+
+    it('should contain text "No user found." and redirect to "/login"', function (done) {
+        const agent = superagent.agent(app);
+
+        agent.post('http://localhost:3000/login')
+            .type('form')
+            .query({'email': 'blabla@mail.ru', 'password': '1111'})
+            .then(res => {
+                expect(res.text).to.include('No user found.');
+                done();
+            })
+            .catch(err => {
+                throw err;
             });
     });
 });
