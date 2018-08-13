@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const router = express.Router();
 
+const Users = require('../controllers/usersController');
 const pages = require('../controllers/pages');
 const authenticationMiddleware = require('../authenticate/middleware');
 
@@ -25,12 +26,7 @@ router.route('/signup')
     .get(function (req, res) {
         res.render('pages/signup.ejs', {message: req.flash('signupMessage') });
     })
-    .post(
-        passport.authenticate('local-signup', {
-            successRedirect: '/',
-            failureRedirect: '/signup',
-            failureFlash: true })
-    );
+    .post(Users.create);
 
 router.get('/profile', authenticationMiddleware, function(req, res) {
     res.render('profile.ejs', {

@@ -42,5 +42,6 @@ module.exports = async function (passport) {
             return done(null, user);
         });
     }));
+
     passport.authenticationMiddleware = authenticationMiddleware;
 };

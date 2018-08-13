@@ -1,7 +1,6 @@
 const express = require('express');
 const api = express.Router();
 
-const pages = require('../controllers/pages');
 const Users = require('../controllers/usersController');
 const Notes = require('../controllers/notesController');
 const Tags = require('../controllers/tagsController');
@@ -18,9 +17,6 @@ api.route('/api/v1/users/:id')
     .get(Users.readUser)
     .put(Users.update)
     .delete(Users.deleteUser);
-
-api.get('/api/v1/registration', pages.registration);
-api.get('/api/v1/login', pages.login);
 
 api.route('/api/v1/users/:id/notes')
     .get(Notes.readPersonalNotes)

@@ -381,4 +381,15 @@ describe('Authentication', function () {
     });
 });
 
-
+describe('Registration', function () {
+    it('should return signup page', function (done) {
+        request(app)
+            .get('/signup')
+            .expect('Content-type', 'text/html; charset=utf-8')
+            .expect(200)
+            .end(function (err, res) {
+                expect(res.text).to.include('Signup');
+                done(err);
+            });
+    });
+});
