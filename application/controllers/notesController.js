@@ -69,8 +69,11 @@ async function update (req, res, next) {
 async function deleteNote (req, res, next) {
     try {
         const db = await dbPromise;
-        await Note.delete(db, req.params.id);
-        res.send('Your note has been deleted!');
+
+        if (req.params.user === req.body.author_id) {
+            await Note.delete(db, req.params.id);
+        }
+        res.send('You don\'t have sufficient access rights');
     } catch (err) {
         next(err);
     }

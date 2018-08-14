@@ -65,7 +65,7 @@ app.use(express.static(__dirname + '/static'));
 
 app.use(function(req, res) {
     res.status(404);
-    res.send('404: Not Found');
+    res.render('pages/404.ejs');
 });
 
 module.exports = {app};

@@ -26,7 +26,9 @@ router.route('/signup')
     .get(function (req, res) {
         res.render('pages/signup.ejs', {message: req.flash('signupMessage') });
     })
-    .post(Users.create);
+    .post(Users.create, function(req, res) {
+        res.redirect('/');
+    });
 
 router.get('/profile', authenticationMiddleware, function(req, res) {
     res.render('pages/profile.ejs', {
