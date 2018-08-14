@@ -10,8 +10,8 @@ class User {
     }
 
     static create(db, email, password, name, phone, birth_date) {
-        db.run('INSERT INTO user(email, password, name, phone, birth_date) VALUES ("' + email + '","' +
-            password + '","' + name + '","' + phone + '","' + birth_date + '")');
+        db.run('INSERT INTO user(email, password, name, phone, notes_count, birth_date) VALUES ("' + email + '","' +
+            password + '","' + name + '","' + phone + '","' + 0 + '","' +birth_date + '")');
     }
 
     static readAllUsers(db) {
