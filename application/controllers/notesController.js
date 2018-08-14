@@ -1,9 +1,7 @@
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
 
-const datetime = require('node-datetime');
-const past = '2015-01-01 00:00:00';
-const pastDateTime = datetime.create(past);
+const date = new Date( Date.now());
 
 async function create (req, res, next) {
     try {
@@ -14,7 +12,7 @@ async function create (req, res, next) {
             res.send('400: Note Not Created');
         }
         else {
-            const note = await Note.create(db, req.body.body, req.params.id, pastDateTime.now());
+            const note = await Note.create(db, req.body.body, req.params.id, date);
             res.status(201);
             res.send(note);
         }

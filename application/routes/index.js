@@ -17,7 +17,7 @@ router.route('/login')
     })
     .post(
         passport.authenticate('local-login', {
-            successRedirect: '/',
+            successRedirect: '/profile',
             failureRedirect: '/login',
             failureFlash: true })
     );
@@ -29,7 +29,7 @@ router.route('/signup')
     .post(Users.create);
 
 router.get('/profile', authenticationMiddleware, function(req, res) {
-    res.render('profile.ejs', {
+    res.render('pages/profile.ejs', {
         user : req.user
     });
 });

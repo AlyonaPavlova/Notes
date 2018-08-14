@@ -97,7 +97,6 @@ describe('GET requests', function () {
                             expect(res.body).to.be.an('array');
                             done(err);
                         });
-
                 });
 
                 it('should return one note, should be an object with keys and values', function (done) {
@@ -128,7 +127,6 @@ describe('GET requests', function () {
                             expect(res.body).to.be.an('array');
                             done(err);
                         });
-
                 });
 
                 it('should return one note with id = 1 for one user', function (done) {
@@ -162,7 +160,6 @@ describe('GET requests', function () {
                         });
                 });
             });
-
         });
     });
 });
@@ -173,11 +170,11 @@ describe('POST requests', function () {
     describe('Users', function () {
         describe('Create user', function () {
             let data = {
-                "email": "mail@mail.ru",
-                "password": "1111",
-                "name": "Name",
-                "phone": "11111",
-                "birth_date": "10.04.96"
+                'email': 'mail@mail.ru',
+                'password': '1111',
+                'name': 'Name',
+                'phone': '11111',
+                'birth_date': '10.04.96'
             };
             it('respond with 201 created', function (done) {
                 request(app)
@@ -189,11 +186,11 @@ describe('POST requests', function () {
 
         describe('Create user error', function () {
             let data = {
-                "password": "1111",
-                "name": "Name",
-                "phone": "",
-                "notes_count": 0,
-                "birth_date": ""
+                'password': '1111',
+                'name': 'Name',
+                'phone': '',
+                'notes_count': 0,
+                'birth_date': ''
             };
             it('respond with 400 not created', function (done) {
                 request(app)
@@ -207,7 +204,7 @@ describe('POST requests', function () {
     describe('Notes', function () {
         describe('Create note', function () {
             let data = {
-                "body": "note's body"
+                'body': 'note\'s body'
             };
             it('respond with 201 created', function (done) {
                 request(app)
@@ -231,7 +228,7 @@ describe('POST requests', function () {
     describe('Tags', function () {
         describe('Create tag', function () {
             let data = {
-                "body": "bodyTag"
+                'body': 'bodyTag'
             };
             it('respond with 201 created', function (done) {
                 request(app)
@@ -249,10 +246,10 @@ describe('PUT requests', function () {
     describe('Users', function () {
         describe('Update user', function () {
             let data = {
-                "password": "newPassword",
-                "name": "newName",
-                "phone": "newPhone",
-                "birth_date": "newDate"
+                'password': 'newPassword',
+                'name': 'newName',
+                'phone': 'newPhone',
+                'birth_date': 'newDate'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
@@ -266,7 +263,7 @@ describe('PUT requests', function () {
     describe('Notes', function () {
         describe('Update note', function () {
             let data = {
-                "body": "newBody"
+                'body': 'newBody'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
@@ -280,7 +277,7 @@ describe('PUT requests', function () {
     describe('Tags', function () {
         describe('Update tag', function () {
             let data = {
-                "body": "newBody"
+                'body': 'newBody'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
@@ -337,31 +334,30 @@ describe('Authentication', function () {
     });
 
     it('should redirect to "/"', function (done) {
-       request(app)
-           .post('/login')
-           .field('email', 'admin@mail.ru')
-           .field('password', '0000')
-           .end(function (err) {
-               expect('Location', '/');
-               done(err);
-           });
-
+        request(app)
+            .post('/login')
+            .field('email', 'admin@mail.ru')
+            .field('password', '0000')
+            .end(function (err) {
+                expect('Location', '/');
+                done(err);
+            });
     });
 
     it('should contain text "Oops! Wrong password." and redirect to "/login"', function (done) {
         const agent = superagent.agent(app);
 
-            agent.post('http://localhost:3000/login')
-                .type('form')
-                .query({'email': 'admin@mail.ru', 'password': '1111'})
-                .then(res => {
-                    expect(res.text).to.include('Oops! Wrong password.');
-                    done();
-                })
-                .catch(err => {
-                    throw err;
-                });
-        });
+        agent.post('http://localhost:3000/login')
+            .type('form')
+            .query({'email': 'admin@mail.ru', 'password': '1111'})
+            .then(res => {
+                expect(res.text).to.include('Oops! Wrong password.');
+                done();
+            })
+            .catch(err => {
+                throw err;
+            });
+    });
 
     it('should contain text "No user found." and redirect to "/login"', function (done) {
         const agent = superagent.agent(app);

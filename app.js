@@ -37,14 +37,14 @@ app.use(bodyParser.json());
 const expiryDate = new Date( Date.now() + 60 * 60 * 1000 );
 
 app.use(session({
+    secret: 'cat',
+    resave: true,
+    saveUninitialized: true,
     store: new RedisStore({
         url: config.redisStore.url
     }),
-    secret: 'cat',
-    resave: false,
-    saveUninitialized: false,
     cookie: {
-        secure: true,
+        secure: false,
         httpOnly: true,
         expires: expiryDate
     }
