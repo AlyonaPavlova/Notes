@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -41,12 +43,11 @@ app.use(session({
     secret: 'cat',
     resave: false,
     saveUninitialized: false,
-    // cookie: { secure: true,
-    //     httpOnly: true,
-    //     domain: 'example.com',
-    //     path: 'foo/bar',
-    //     expires: expiryDate
-    // }
+    cookie: {
+        secure: true,
+        httpOnly: true,
+        expires: expiryDate
+    }
 }));
 
 app.use(passport.initialize());

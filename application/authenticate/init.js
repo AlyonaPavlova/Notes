@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt-nodejs');
 const LocalStrategy = require('passport-local').Strategy;
 const authenticationMiddleware = require('../authenticate/middleware');
 
@@ -36,9 +37,14 @@ module.exports = async function (passport) {
             if (user === undefined) {
                 return done(null, false, req.flash('loginMessage', 'No user found.'));
             }
-            if (password !== user.password) {
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-            }
+            bcrypt.compare(password, user.password, (err, isValid) => {
+                if (err) {
+                    return done(err)
+                }
+                if (!isValid) {
+                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                }
+            });
             return done(null, user);
         });
     }));
