@@ -12,13 +12,18 @@ async function create (req, res, next) {
             res.send('400: User Not Created');
         }
         else {
-            // const hashedPassword = await new Promise((resolve, reject) => {
-            //     bcrypt.hash(req.body.password, 10, function(err, hash) {
-            //         if (err) reject(err);
-            //         resolve(hash);
-            //     });
-            // });
-            const user = await User.create(db, req.body.email, req.body.password, req.body.name, req.body.phone, req.body.birth_date);
+                const hashedPassword = await new Promise((resolve, reject) => {
+                bcrypt.genSalt(10, (err, salt) => {
+                    if (err) {
+                        return next(err);
+                    }
+                    bcrypt.hash(req.body.password, salt, function(err, hash) {
+                        if (err) reject(err);
+                        resolve(hash);
+                    });
+                });
+            });
+            const user = await User.create(db, req.body.email, hashedPassword, req.body.name, req.body.phone, req.body.birth_date);
             res.status(201);
             res.send(user);
         }

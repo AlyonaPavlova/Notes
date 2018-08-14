@@ -1,8 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
 const superagent = require('superagent');
-// const agent = require('superagent-wrapper');
-// const request = require('superagent');
 const request = require('supertest');
 const {app} = require('../app');
 

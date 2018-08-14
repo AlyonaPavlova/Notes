@@ -7,6 +7,7 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 const RedisStore = require('connect-redis')(session);
+const helmet = require('helmet');
 
 const {router} = require('./application/routes/index');
 const {api} = require('./application/routes/api');
@@ -25,10 +26,13 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use(helmet());
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+const expiryDate = new Date( Date.now() + 60 * 60 * 1000 );
 
 app.use(session({
     store: new RedisStore({
@@ -36,7 +40,13 @@ app.use(session({
     }),
     secret: 'cat',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    // cookie: { secure: true,
+    //     httpOnly: true,
+    //     domain: 'example.com',
+    //     path: 'foo/bar',
+    //     expires: expiryDate
+    // }
 }));
 
 app.use(passport.initialize());
