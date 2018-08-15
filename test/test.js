@@ -267,9 +267,9 @@ describe('PUT requests', function () {
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/users/:id/notes/1')
+                    .put('/api/v1/users/2/notes/7')
                     .send(data)
-                    .expect(200, done);
+                    .expect(200, done)
             });
         });
     });
@@ -304,7 +304,7 @@ describe('DELETE requests', function () {
         describe('Delete note', function () {
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/users/1/notes/6')
+                    .delete('/api/v1/users/1/notes/7')
                     .expect(200, done);
             });
         });

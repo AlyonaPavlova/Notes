@@ -13,29 +13,29 @@ api.route('/api/v1/users')
     .get(Users.readAllUsers)
     .post(Users.create);
 
-api.route('/api/v1/users/:id')
+api.route('/api/v1/users/:userId')
     .get(Users.readUser)
     .put(Users.update)
     .delete(Users.deleteUser);
 
-api.route('/api/v1/users/:id/notes')
+api.route('/api/v1/users/:userId/notes')
     .get(Notes.readPersonalNotes)
     .post(Notes.create);
 
-api.route('/api/v1/users/:id/notes/:id')
+api.route('/api/v1/users/:userId/notes/:noteId')
     .get(Notes.readNote)
     .put(Notes.update)
     .delete(Notes.deleteNote);
 
-api.route('/api/v1/users/:id/notes/:id/tags')
+api.route('/api/v1/users/:userId/notes/:noteId/tags')
     .get(Tags.readAllTags)
     .post(Tags.create);
 
-api.route('/api/v1/users/:id/notes/:id/tags/:id')
+api.route('/api/v1/users/:userId/notes/:noteId/tags/:tagId')
     .put(Tags.update)
     .delete(Tags.deleteTag);
 
 api.get('/api/v1/notes', Notes.readAllNotes);
-api.get('/api/v1/notes/:id', Notes.readNote);
+api.get('/api/v1/notes/:noteId', Notes.readNote);
 
 module.exports = {api};

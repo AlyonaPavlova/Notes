@@ -56,11 +56,30 @@ async function readNote (req, res, next) {
     }
 }
 
+async function comparison(userId, authorId, db, noteBody, noteId) {
+    if (+userId === authorId) {
+        console.log('dddd');
+
+        return await Note.update(db, noteBody, noteId);
+    }
+    else {
+        console.log("ERROR");
+    }
+}
+
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        const note = await Note.update(db, req.body.body, req.params.id);
-        res.send(note);
+        const author = await Note.getNoteAuthor(db, req.params.id);
+
+        if (+req.params.userId === author.author_id) {
+            await Note.update(db, req.body.body, req.params.id);
+            res.send('The note has been successfully updated');
+        }
+        else {
+            res.status(403);
+            res.send('You don\'t have sufficient access rights');
+        }
     } catch (err) {
         next(err);
     }
@@ -69,11 +88,16 @@ async function update (req, res, next) {
 async function deleteNote (req, res, next) {
     try {
         const db = await dbPromise;
+        const author = await Note.getNoteAuthor(db, req.params.id);
 
-        if (req.params.user === req.body.author_id) {
+        if (+req.params.userId === author.author_id) {
             await Note.delete(db, req.params.id);
+            res.send('The note has been successfully deleted');
         }
-        res.send('You don\'t have sufficient access rights');
+        else {
+            res.status(403);
+            res.send('You don\'t have sufficient access rights');
+        }
     } catch (err) {
         next(err);
     }

@@ -23,6 +23,10 @@ class Note {
         return db.get('SELECT * FROM note WHERE id = ?', id);
     }
 
+    static getNoteAuthor(db, id) {
+        return db.get('SELECT author_id FROM note WHERE id = ?', id);
+    }
+
     static update(db, body, id) {
         db.run('UPDATE note SET body ="' + body + '" WHERE id = ?', id);
     }
