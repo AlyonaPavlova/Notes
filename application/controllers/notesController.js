@@ -12,7 +12,7 @@ async function create (req, res, next) {
             res.send('400: Note Not Created');
         }
         else {
-            const note = await Note.create(db, req.body.body, req.params.id, date);
+            const note = await Note.create(db, req.body.body, req.params.noteId, date);
             res.status(201);
             res.send(note);
         }
@@ -34,7 +34,7 @@ async function readAllNotes (req, res, next) {
 async function readPersonalNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.readPersonalNotes(db, req.params.id);
+        const notes = await Note.readPersonalNotes(db, req.params.noteId);
         res.send(notes);
     } catch (err) {
         next(err);
@@ -44,7 +44,7 @@ async function readPersonalNotes (req, res, next) {
 async function readNote (req, res, next) {
     try {
         const db = await dbPromise;
-        const note = await Note.readNote(db, req.params.id);
+        const note = await Note.readNote(db, req.params.noteId);
 
         if (!note) {
             res.status(404);
@@ -56,24 +56,13 @@ async function readNote (req, res, next) {
     }
 }
 
-async function comparison(userId, authorId, db, noteBody, noteId) {
-    if (+userId === authorId) {
-        console.log('dddd');
-
-        return await Note.update(db, noteBody, noteId);
-    }
-    else {
-        console.log("ERROR");
-    }
-}
-
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        const author = await Note.getNoteAuthor(db, req.params.id);
+        const author = await Note.getNoteAuthor(db, req.params.noteId);
 
         if (+req.params.userId === author.author_id) {
-            await Note.update(db, req.body.body, req.params.id);
+            await Note.update(db, req.body.body, req.params.noteId);
             res.send('The note has been successfully updated');
         }
         else {
@@ -88,10 +77,10 @@ async function update (req, res, next) {
 async function deleteNote (req, res, next) {
     try {
         const db = await dbPromise;
-        const author = await Note.getNoteAuthor(db, req.params.id);
+        const author = await Note.getNoteAuthor(db, req.params.noteId);
 
         if (+req.params.userId === author.author_id) {
-            await Note.delete(db, req.params.id);
+            await Note.delete(db, req.params.noteId);
             res.send('The note has been successfully deleted');
         }
         else {

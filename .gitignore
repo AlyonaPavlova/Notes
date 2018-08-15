@@ -1,5 +1,5 @@
 .idea/
 node_modules/
 config/db.js
-*.rdb
+dump.rdb
 

@@ -24,10 +24,16 @@ router.route('/login')
 
 router.route('/signup')
     .get(function (req, res) {
-        res.render('pages/signup.ejs', {message: req.flash('signupMessage') });
+        res.render('pages/signup.ejs', {message: req.flash('error') });
     })
-    .post(Users.create, function(req, res) {
-        res.redirect('/');
+    .post(async function (req, res) {
+        if (!req.body.email || !req.body.password || !req.body.name) {
+            // res.render('register', { error: 'Email and password required.' });
+            req.flash('error', 'Please, enter your email, password and name');
+        } else {
+            Users.create;
+        }
+        res.redirect('/profile');
     });
 
 router.get('/profile', authenticationMiddleware, function(req, res) {

@@ -13,9 +13,6 @@ async function findUser (email, callback) {
     }
 }
 module.exports = async function (passport) {
-    passport.authenticate('local', {failureFlash: 'Invalid username or password.'});
-    passport.authenticate('local', {successFlash: 'Welcome!'});
-
     passport.serializeUser(async function (user, done) {
         done(null, user.email);
     });

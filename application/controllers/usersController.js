@@ -6,12 +6,6 @@ const {User} = require('../models/users');
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
-
-        if (!req.body.email || !req.body.password || !req.body.name) {
-            res.status(400);
-            res.send('400: User Not Created');
-        }
-        else {
                 const hashedPassword = await new Promise((resolve, reject) => {
                 bcrypt.genSalt(10, (err, salt) => {
                     if (err) {
@@ -26,7 +20,6 @@ async function create (req, res, next) {
             const user = await User.create(db, req.body.email, hashedPassword, req.body.name, req.body.phone, req.body.birth_date);
             res.status(201);
             res.send(user);
-        }
     } catch (err) {
         next(err);
     }
@@ -60,7 +53,7 @@ async function readUser (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        const user = await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date, req.params.id);
+        const user = await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date, req.params.userId);
         res.send(user);
     } catch (err) {
         next(err);
