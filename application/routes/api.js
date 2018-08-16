@@ -10,32 +10,32 @@ api.get('/api/v1', function (req, res) {
 });
 
 api.route('/api/v1/users')
-    .get(Users.readAllUsers)
+    .get(Users.getAllUsers)
     .post(Users.create);
 
 api.route('/api/v1/users/:userId')
-    .get(Users.readUser)
+    .get(Users.getUser)
     .put(Users.update)
     .delete(Users.deleteUser);
 
 api.route('/api/v1/users/:userId/notes')
-    .get(Notes.readPersonalNotes)
+    .get(Notes.getPersonalNotes)
     .post(Notes.create);
 
 api.route('/api/v1/users/:userId/notes/:noteId')
-    .get(Notes.readNote)
+    .get(Notes.getNote)
     .put(Notes.update)
     .delete(Notes.deleteNote);
 
 api.route('/api/v1/users/:userId/notes/:noteId/tags')
-    .get(Tags.readAllTags)
+    .get(Tags.getAllTags)
     .post(Tags.create);
 
 api.route('/api/v1/users/:userId/notes/:noteId/tags/:tagId')
     .put(Tags.update)
     .delete(Tags.deleteTag);
 
-api.get('/api/v1/notes', Notes.readAllNotes);
-api.get('/api/v1/notes/:noteId', Notes.readNote);
+api.get('/api/v1/notes', Notes.getAllNotes);
+api.get('/api/v1/notes/:noteId', Notes.getNote);
 
 module.exports = {api};

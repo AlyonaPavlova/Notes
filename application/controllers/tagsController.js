@@ -19,10 +19,10 @@ async function create (req, res, next) {
     }
 }
 
-async function readAllTags (req, res, next) {
+async function getAllTags (req, res, next) {
     try {
         const db = await dbPromise;
-        const tags = await Tag.readAllTags(db, req.params.id);
+        const tags = await Tag.getAllTags(db, req.params.id);
         res.send(tags);
     } catch (err) {
         next(err);
@@ -49,4 +49,4 @@ async function deleteTag (req, res, next) {
     }
 }
 
-module.exports = {create, readAllTags, update, deleteTag};
+module.exports = {create, getAllTags, update, deleteTag};

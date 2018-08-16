@@ -21,30 +21,30 @@ async function create (req, res, next) {
     }
 }
 
-async function readAllNotes (req, res, next) {
+async function getAllNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.readAllNotes(db);
+        const notes = await Note.getAllNotes(db);
         res.send(notes);
     } catch (err) {
         next(err);
     }
 }
 
-async function readPersonalNotes (req, res, next) {
+async function getPersonalNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.readPersonalNotes(db, req.params.noteId);
+        const notes = await Note.getPersonalNotes(db, req.params.noteId);
         res.send(notes);
     } catch (err) {
         next(err);
     }
 }
 
-async function readNote (req, res, next) {
+async function getNote (req, res, next) {
     try {
         const db = await dbPromise;
-        const note = await Note.readNote(db, req.params.noteId);
+        const note = await Note.getNote(db, req.params.noteId);
 
         if (!note) {
             res.status(404);
@@ -92,4 +92,4 @@ async function deleteNote (req, res, next) {
     }
 }
 
-module.exports = {create, readAllNotes, readPersonalNotes, readNote, update, deleteNote};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote};

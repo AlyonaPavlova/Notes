@@ -52,28 +52,29 @@ async function create (req, res, next) {
             });
             await User.create(db, req.body.email, hashedPassword, req.body.name, req.body.phone, req.body.birth_date);
             res.status(201);
-            res.send(user);
         }
-        // res.render('pages/profile.ejs', {user : req.user});
+        const user = await User.getUserByEmail(db, req.body.email);
+        console.log(user);
+        res.render('pages/profile.ejs', {user : user});
     } catch (err) {
         next(err);
     }
 }
 
-async function readAllUsers (req, res, next) {
+async function getAllUsers (req, res, next) {
     try {
         const db = await dbPromise;
-        const users = await User.readAllUsers(db);
+        const users = await User.getAllUsers(db);
         res.send(users);
     } catch (err) {
         next(err);
     }
 }
 
-async function readUser (req, res, next) {
+async function getUser (req, res, next) {
     try {
         const db = await dbPromise;
-        const user = await User.readUser(db, req.params.id);
+        const user = await User.getUser(db, req.params.id);
 
         if (!user) {
             res.status(404);
@@ -114,4 +115,4 @@ async function findUser (email) {
     }
 }
 
-module.exports = {create, readAllUsers, readUser, update, deleteUser, findUser};
+module.exports = {create, getAllUsers, getUser, update, deleteUser, findUser};

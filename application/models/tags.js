@@ -8,7 +8,7 @@ class Tag {
         db.run('INSERT INTO tag(body, note_id) VALUES ("' + body + '","' + note_id + '")');
     }
 
-    static readAllTags(db, note_id) {
+    static getAllTags(db, note_id) {
         return db.all('SELECT * FROM tag WHERE note_id = ?', note_id);
     }
 

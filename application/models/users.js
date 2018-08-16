@@ -11,15 +11,19 @@ class User {
 
     static create(db, email, password, name, phone, birth_date) {
         db.run('INSERT INTO user(email, password, name, phone, notes_count, birth_date) VALUES ("' + email + '","' +
-            password + '","' + name + '","' + phone + '","' + 0 + '","' +birth_date + '")');
+            password + '","' + name + '","' + phone + '","' + 0 + '","' + birth_date + '")');
     }
 
-    static readAllUsers(db) {
+    static getAllUsers(db) {
         return db.all('SELECT * FROM user');
     }
 
-    static readUser(db, id) {
+    static getUser(db, id) {
         return db.get('SELECT * FROM user WHERE id = ?', id);
+    }
+
+    static getUserByEmail(db, email) {
+        return db.get('SELECT * FROM user WHERE email = ?', email);
     }
 
     static update(db, password, name, phone, birth_date, id) {

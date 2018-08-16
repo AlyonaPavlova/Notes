@@ -11,15 +11,15 @@ class Note {
         db.run('INSERT INTO note(body, author_id, creation_date) VALUES ("' + body + '","' + author_id + '","' + date + '")');
     }
 
-    static readAllNotes(db) {
+    static getAllNotes(db) {
         return db.all('SELECT * FROM note');
     }
 
-    static readPersonalNotes(db, user_id) {
+    static getPersonalNotes(db, user_id) {
         return db.all('SELECT * FROM note WHERE author_id = ?', user_id);
     }
 
-    static readNote(db, id) {
+    static getNote(db, id) {
         return db.get('SELECT * FROM note WHERE id = ?', id);
     }
 
