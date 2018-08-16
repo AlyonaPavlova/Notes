@@ -1,5 +1,7 @@
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
+const checkSessionMiddleware = require('../routes/middleware');
+const authenticationMiddleware = require('../authenticate/middleware');
 
 const date = new Date( Date.now());
 
@@ -59,16 +61,7 @@ async function getNote (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        const author = await Note.getNoteAuthor(db, req.params.noteId);
-
-        if (+req.params.userId === author.author_id) {
-            await Note.update(db, req.body.body, req.params.noteId);
-            res.send('The note has been successfully updated');
-        }
-        else {
-            res.status(403);
-            res.send('You don\'t have sufficient access rights');
-        }
+        await Note.update(db, req.body.body, req.params.noteId);
     } catch (err) {
         next(err);
     }

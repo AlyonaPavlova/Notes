@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const parseurl = require('parseurl');
 const morgan = require('morgan');
 const engine = require('ejs-mate');
 const passport = require('passport');
@@ -46,9 +47,21 @@ app.use(session({
     cookie: {
         secure: false,
         httpOnly: true,
+        maxAge: 60000,
         expires: expiryDate
     }
 }));
+
+// app.use(function (req, res, next) {
+//     if (!req.session.views) {
+//         req.session.views = {}
+//     }
+//     const pathname = parseurl(req).pathname;
+//
+//     req.session.views[pathname] = (req.session.views[pathname] || 0) + 1;
+//
+//     next()
+// });
 
 app.use(passport.initialize());
 app.use(passport.session());

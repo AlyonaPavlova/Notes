@@ -267,7 +267,7 @@ describe('PUT requests', function () {
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/users/2/notes/7')
+                    .put('/api/v1/users/1/notes/2')
                     .send(data)
                     .expect(200, done)
             });

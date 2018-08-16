@@ -1,6 +1,10 @@
 const express = require('express');
 const api = express.Router();
 
+const passport = require('passport');
+const authenticationMiddleware = require('../authenticate/middleware');
+const checkIdMiddleware = require('../routes/middleware');
+
 const Users = require('../controllers/usersController');
 const Notes = require('../controllers/notesController');
 const Tags = require('../controllers/tagsController');
@@ -24,7 +28,12 @@ api.route('/api/v1/users/:userId/notes')
 
 api.route('/api/v1/users/:userId/notes/:noteId')
     .get(Notes.getNote)
-    .put(Notes.update)
+    .put(
+    passport.authenticate('local-login', {email: 'admin@mail.ru', password: '0000'}),
+    authenticationMiddleware,
+    checkIdMiddleware,
+    Notes.update
+    )
     .delete(Notes.deleteNote);
 
 api.route('/api/v1/users/:userId/notes/:noteId/tags')
