@@ -57,7 +57,7 @@ require('./application/authenticate/init')(passport);
 app.use(flash());
 app.use(function(req, res, next){
     res.locals.success = req.flash('success');
-    res.locals.errors = req.flash('error');
+    res.locals.error = req.flash('error');
     next();
 });
 app.use(router, api);

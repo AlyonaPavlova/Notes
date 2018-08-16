@@ -6,7 +6,40 @@ const {User} = require('../models/users');
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
-                const hashedPassword = await new Promise((resolve, reject) => {
+        if (!req.body.email) {
+            req.flash('error', 'Please, enter your email');
+            res.render('pages/signup.ejs', {
+                message: req.flash('error'),
+                password: req.body.password,
+                name: req.body.name,
+                phone: req.body.phone,
+                birth_date: req.body.birth_date
+            });
+        }
+        if (!req.body.password) {
+            const email = req.body.email;
+
+            req.flash('error', 'Please, enter your password');
+            res.render('pages/signup.ejs', {
+                message: req.flash('error'),
+                email: email,
+                name: req.body.name,
+                phone: req.body.phone,
+                birth_date: req.body.birth_date
+            });
+        }
+        if (!req.body.name) {
+            req.flash('error', 'Please, enter your name');
+            res.render('pages/signup.ejs', {
+                message: req.flash('error'),
+                email: req.body.email,
+                password: req.body.password,
+                phone: req.body.phone,
+                birth_date: req.body.birth_date
+            });
+        }
+        else {
+            const hashedPassword = await new Promise((resolve, reject) => {
                 bcrypt.genSalt(10, (err, salt) => {
                     if (err) {
                         return next(err);
@@ -17,9 +50,11 @@ async function create (req, res, next) {
                     });
                 });
             });
-            const user = await User.create(db, req.body.email, hashedPassword, req.body.name, req.body.phone, req.body.birth_date);
+            await User.create(db, req.body.email, hashedPassword, req.body.name, req.body.phone, req.body.birth_date);
             res.status(201);
             res.send(user);
+        }
+        // res.render('pages/profile.ejs', {user : req.user});
     } catch (err) {
         next(err);
     }
