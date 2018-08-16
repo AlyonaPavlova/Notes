@@ -263,13 +263,15 @@ describe('PUT requests', function () {
     describe('Notes', function () {
         describe('Update note', function () {
             let data = {
-                'body': 'newBody'
+                'body': 'newBody',
+                'email': 'admin@mail.ru',
+                'password': '0000'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/users/1/notes/2')
+                    .put('/api/v1/users/51/notes/9')
                     .send(data)
-                    .expect(200, done)
+                    .expect(200, done);
             });
         });
     });

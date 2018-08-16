@@ -29,10 +29,10 @@ api.route('/api/v1/users/:userId/notes')
 api.route('/api/v1/users/:userId/notes/:noteId')
     .get(Notes.getNote)
     .put(
-    passport.authenticate('local-login', {email: 'admin@mail.ru', password: '0000'}),
-    authenticationMiddleware,
-    checkIdMiddleware,
-    Notes.update
+        passport.authenticate('local-login'),
+        authenticationMiddleware,
+        checkIdMiddleware,
+        Notes.update
     )
     .delete(Notes.deleteNote);
 

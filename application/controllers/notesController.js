@@ -62,6 +62,7 @@ async function update (req, res, next) {
     try {
         const db = await dbPromise;
         await Note.update(db, req.body.body, req.params.noteId);
+        res.send('The note has been successfully updated');
     } catch (err) {
         next(err);
     }
