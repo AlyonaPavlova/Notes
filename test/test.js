@@ -304,9 +304,14 @@ describe('DELETE requests', function () {
 
     describe('Notes', function () {
         describe('Delete note', function () {
+            let data = {
+                'email': 'admin@mail.ru',
+                'password': '0000'
+            };
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/users/1/notes/7')
+                    .delete('/api/v1/notes/9')
+                    .send(data)
                     .expect(200, done);
             });
         });
