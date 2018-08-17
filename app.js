@@ -17,6 +17,12 @@ const {api} = require('./application/routes/api');
 const config = require('./config');
 const app = express();
 
+app.set('views','./application/views');
+app.set('view options', { layout:'./application/views/layout.ejs' });
+app.set('view engine', 'ejs');
+app.engine('ejs', engine);
+app.use(express.static(__dirname + '/static'));
+
 app.engine('ejs', engine);
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/application/views');
@@ -62,6 +68,12 @@ app.use(function(req, res, next){
     next();
 });
 app.use(router, api);
+
+app.set('views','./application/views');
+app.set('view options', { layout:'./application/views/layout.ejs' });
+app.set('view engine', 'ejs');
+app.engine('ejs', engine);
+app.use(express.static(__dirname + '/static'));
 
 app.use(function(req, res) {
     res.status(404);

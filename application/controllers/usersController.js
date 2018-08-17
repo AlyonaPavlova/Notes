@@ -6,38 +6,34 @@ const {User} = require('../models/users');
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
+
         if (!req.body.email) {
             req.flash('error', 'Please, enter your email');
-            res.render('pages/signup.ejs', {
+            return res.render('pages/signup.ejs', {
                 message: req.flash('error'),
-                password: req.body.password,
                 name: req.body.name,
                 phone: req.body.phone,
                 birth_date: req.body.birth_date
             });
-            res.send('400: User Not Created');
         }
         if (!req.body.password) {
             req.flash('error', 'Please, enter your password');
-            res.render('pages/signup.ejs', {
+            return res.render('pages/signup.ejs', {
                 message: req.flash('error'),
                 email: req.body.email,
                 name: req.body.name,
                 phone: req.body.phone,
                 birth_date: req.body.birth_date
             });
-            res.send('400: User Not Created');
         }
         if (!req.body.name) {
             req.flash('error', 'Please, enter your name');
-            res.render('pages/signup.ejs', {
+            return res.render('pages/signup.ejs', {
                 message: req.flash('error'),
                 email: req.body.email,
-                password: req.body.password,
                 phone: req.body.phone,
                 birth_date: req.body.birth_date
             });
-            res.send('400: User Not Created');
         }
         else {
             const hashedPassword = await new Promise((resolve, reject) => {

@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/AlyonaPavlova/Notes#readme",
   "dependencies": {
+    "@nestjs/graphql": "^3.0.0",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
@@ -40,12 +41,16 @@
     "ejs-mate": "^2.3.0",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "graphql": "^0.13.2",
+    "graphql-tools": "^3.1.1",
     "helmet": "^3.13.0",
     "imask": "^3.4.0",
     "jquery-slim": "^3.0.0",
+    "jsdom": "^11.12.0",
     "mocha": "^5.2.0",
     "morgan": "^1.9.0",
     "node-datetime": "^2.0.8",
+    "parseurl": "latest",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "redis": "^2.8.0",
@@ -56,7 +61,6 @@
     "superagent": "^3.8.3",
     "superagent-wrapper": "^1.0.0",
     "swagger-client": "^3.8.12",
-    "swagger-js-codegen": "^1.12.0",
-    "parseurl": "latest"
+    "swagger-js-codegen": "^1.12.0"
   }
 }
