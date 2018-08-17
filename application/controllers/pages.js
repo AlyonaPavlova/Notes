@@ -21,3 +21,7 @@ exports.newNote = function (req, res) {
         message: 'Form for new note'
     });
 };
+
+exports.logs = function (req, res) {
+    res.render('pages/logs')
+};

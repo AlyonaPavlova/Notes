@@ -10,6 +10,7 @@ router.get('/', function (req, res) { res.redirect('home');});
 router.get('/home', pages.home);
 router.get('/features', pages.features);
 router.get('/news', pages.news);
+router.get('/logs', pages.logs);
 
 router.route('/login')
     .get(function (req, res) {
