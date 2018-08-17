@@ -21,9 +21,3 @@ exports.newNote = function (req, res) {
         message: 'Form for new note'
     });
 };
-
-exports.newTag = function (req, res) {
-    res.render('pages/newTag', {
-        message: 'Form for new tag'
-    });
-};

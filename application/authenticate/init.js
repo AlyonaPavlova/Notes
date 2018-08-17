@@ -41,8 +41,8 @@ module.exports = async function (passport) {
                 if (!isValid) {
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
                 }
+                return done(null, user);
             });
-            return done(null, user);
         });
     }));
 

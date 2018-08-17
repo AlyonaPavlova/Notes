@@ -10,7 +10,7 @@ async function create (req, res, next) {
             res.send('400: Note Not Created');
         }
         else {
-            const tag = await Tag.create(db, req.body.body, req.params.id);
+            const tag = await Tag.create(db, req.body.body, req.params.noteId);
             res.status(201);
             res.send(tag);
         }
@@ -22,7 +22,7 @@ async function create (req, res, next) {
 async function getAllTags (req, res, next) {
     try {
         const db = await dbPromise;
-        const tags = await Tag.getAllTags(db, req.params.id);
+        const tags = await Tag.getAllTags(db, req.params.noteId);
         res.send(tags);
     } catch (err) {
         next(err);
@@ -32,7 +32,7 @@ async function getAllTags (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        const tag = Tag.update(db, req.body.body, req.params.id);
+        const tag = Tag.update(db, req.body.body, req.params.tagId);
         res.send(tag);
     } catch (err) {
         next(err);
@@ -42,7 +42,7 @@ async function update (req, res, next) {
 async function deleteTag (req, res, next) {
     try {
         const db = await dbPromise;
-        await Tag.delete(db, req.params.id);
+        await Tag.delete(db, req.params.tagId);
         res.send('Tag has been deleted');
     } catch (err) {
         next(err);

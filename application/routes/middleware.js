@@ -7,7 +7,7 @@ async function checkIdMiddleware (req, res, next) {
     const author = await Note.getNoteAuthor(db, noteId);
 
     if (req.user.id === author.author_id) {
-        return  next();
+        return next();
     }
     res.redirect('/');
 }

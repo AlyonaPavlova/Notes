@@ -15,18 +15,18 @@ async function create (req, res, next) {
                 phone: req.body.phone,
                 birth_date: req.body.birth_date
             });
+            res.send('400: User Not Created');
         }
         if (!req.body.password) {
-            const email = req.body.email;
-
             req.flash('error', 'Please, enter your password');
             res.render('pages/signup.ejs', {
                 message: req.flash('error'),
-                email: email,
+                email: req.body.email,
                 name: req.body.name,
                 phone: req.body.phone,
                 birth_date: req.body.birth_date
             });
+            res.send('400: User Not Created');
         }
         if (!req.body.name) {
             req.flash('error', 'Please, enter your name');
@@ -37,6 +37,7 @@ async function create (req, res, next) {
                 phone: req.body.phone,
                 birth_date: req.body.birth_date
             });
+            res.send('400: User Not Created');
         }
         else {
             const hashedPassword = await new Promise((resolve, reject) => {
@@ -54,7 +55,6 @@ async function create (req, res, next) {
             res.status(201);
         }
         const user = await User.getUserByEmail(db, req.body.email);
-        console.log(user);
         res.render('pages/profile.ejs', {user : user});
     } catch (err) {
         next(err);
@@ -74,7 +74,7 @@ async function getAllUsers (req, res, next) {
 async function getUser (req, res, next) {
     try {
         const db = await dbPromise;
-        const user = await User.getUser(db, req.params.id);
+        const user = await User.getUser(db, req.params.userId);
 
         if (!user) {
             res.status(404);
@@ -89,7 +89,7 @@ async function getUser (req, res, next) {
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
-        const user = await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date, req.params.userId);
+        const user = await User.update(db, req.body.password, req.body.name, req.body.phone, req.body.birth_date, req.user.id);
         res.send(user);
     } catch (err) {
         next(err);
@@ -99,7 +99,7 @@ async function update (req, res, next) {
 async function deleteUser (req, res, next) {
     try {
         const db = await dbPromise;
-        await User.delete(db, req.params.id);
+        await User.delete(db, req.user.id);
         res.send('You are removed from the system!');
     } catch (err) {
         next(err);

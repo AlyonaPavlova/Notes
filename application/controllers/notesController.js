@@ -1,7 +1,5 @@
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
-const checkSessionMiddleware = require('../routes/middleware');
-const authenticationMiddleware = require('../authenticate/middleware');
 
 const date = new Date( Date.now());
 
@@ -14,9 +12,8 @@ async function create (req, res, next) {
             res.send('400: Note Not Created');
         }
         else {
-            const note = await Note.create(db, req.body.body, req.params.noteId, date);
-            res.status(201);
-            res.send(note);
+            await Note.create(db, req.body.body, req.user.id, date);
+            res.send('The note has been successfully created');
         }
     } catch (err) {
         next(err);
@@ -36,7 +33,7 @@ async function getAllNotes (req, res, next) {
 async function getPersonalNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.getPersonalNotes(db, req.params.noteId);
+        const notes = await Note.getPersonalNotes(db, req.params.id);
         res.send(notes);
     } catch (err) {
         next(err);

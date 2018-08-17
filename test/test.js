@@ -1,7 +1,8 @@
 const chai = require('chai');
 const expect = chai.expect;
-const superagent = require('superagent');
 const request = require('supertest');
+const superagent = require('superagent');
+
 const {app} = require('../app');
 
 describe('GET requests', function () {
@@ -37,6 +38,16 @@ describe('GET requests', function () {
                     done(err);
                 });
         });
+        it('should return signup page', function (done) {
+            request(app)
+                .get('/signup')
+                .expect('Content-type', 'text/html; charset=utf-8')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.text).to.include('Signup');
+                    done(err);
+                });
+        });
     });
 
     describe('API', function () {
@@ -64,15 +75,13 @@ describe('GET requests', function () {
                             expect(res.body).to.have.property('email');
                             expect(res.body.email).to.equal('admin@mail.ru');
                             expect(res.body).to.have.property('password');
-                            expect(res.body.password).to.equal('0000');
+                            expect(res.body.password).to.not.equal(null);
                             expect(res.body).to.have.property('name');
                             expect(res.body.name).to.equal('Admin');
                             expect(res.body).to.have.property('phone');
-                            expect(res.body.phone).to.equal(null);
                             expect(res.body).to.have.property('notes_count');
-                            expect(res.body.notes_count).to.equal(null);
+                            expect(res.body.notes_count).to.equal(0);
                             expect(res.body).to.have.property('birth_date');
-                            expect(res.body.birth_date).to.equal(null);
                             done(err);
                         });
                 });
@@ -118,9 +127,14 @@ describe('GET requests', function () {
             });
 
             describe('Correct notes returned for one user', function () {
+                let data = {
+                    'email': 'admin@mail.ru',
+                    'password': '0000'
+                };
                 it('should return list of all notes for one user', function (done) {
                     request(app)
-                        .get('/api/v1/users/1/notes')
+                        .get('/api/v1/profile/notes')
+                        .send(data)
                         .expect('Content-type', /json/)
                         .expect(200)
                         .end(function (err, res) {
@@ -130,8 +144,13 @@ describe('GET requests', function () {
                 });
 
                 it('should return one note with id = 1 for one user', function (done) {
+                    let data = {
+                        'email': 'admin@mail.ru',
+                        'password': '0000'
+                    };
                     request(app)
-                        .get('/api/v1/users/1/notes/1')
+                        .get('/api/v1/profile/notes/1')
+                        .send(data)
                         .expect('Content-type', /json/)
                         .expect(200)
                         .end(function (err, res) {
@@ -151,7 +170,7 @@ describe('GET requests', function () {
             describe('Correct tags returned', function () {
                 it('should return list of all tags', function (done) {
                     request(app)
-                        .get('/api/v1/users/1/notes/1/tags')
+                        .get('/api/v1/notes/1/tags')
                         .expect('Content-type', /json/)
                         .expect(200)
                         .end(function (err, res) {
@@ -178,7 +197,7 @@ describe('POST requests', function () {
             };
             it('respond with 201 created', function (done) {
                 request(app)
-                    .post('/api/v1/users')
+                    .post('/signup')
                     .send(data)
                     .expect(201, done);
             });
@@ -188,39 +207,46 @@ describe('POST requests', function () {
             let data = {
                 'password': '1111',
                 'name': 'Name',
-                'phone': '',
-                'notes_count': 0,
-                'birth_date': ''
             };
             it('respond with 400 not created', function (done) {
-                request(app)
-                    .post('/api/v1/users')
+                const agent = superagent.agent(app);
+
+                agent.post('http://localhost:3000/signup')
                     .send(data)
-                    .expect(400)
-                    .expect('400: User Not Created', done);
+                    .then(res => {
+                        expect(res.text).to.include('Please, enter your email');
+                        done();
+                    })
+                    .catch(err => {
+                        throw err;
+                    });
             });
         });
     });
     describe('Notes', function () {
         describe('Create note', function () {
             let data = {
-                'body': 'note\'s body'
+                'body': 'note\'s body',
+                'email': 'admin@mail.ru',
+                'password': '0000'
             };
             it('respond with 201 created', function (done) {
                 request(app)
-                    .post('/api/v1/users/1/notes')
+                    .post('/api/v1/profile/notes/new')
                     .send(data)
-                    .expect(201, done);
+                    .expect(200, done);
             });
         });
 
         describe('Create note error', function () {
-            let data = {};
+            let data = {
+                'email': 'admin@mail.ru',
+                'password': '0000'
+            };
             it('respond with 400 not created', function (done) {
                 request(app)
-                    .post('/api/v1/users/:id/notes')
+                    .post('/api/v1/profile/notes/new')
                     .send(data)
-                    .expect(400)
                     .expect('400: Note Not Created', done);
             });
         });
@@ -232,7 +258,7 @@ describe('POST requests', function () {
             };
             it('respond with 201 created', function (done) {
                 request(app)
-                    .post('/api/v1/users/:id/notes/1/tags')
+                    .post('/api/v1/profile/notes/1/tags/new')
                     .send(data)
                     .expect(201, done);
             });
@@ -246,14 +272,15 @@ describe('PUT requests', function () {
     describe('Users', function () {
         describe('Update user', function () {
             let data = {
-                'password': 'newPassword',
                 'name': 'newName',
                 'phone': 'newPhone',
-                'birth_date': 'newDate'
+                'birth_date': 'newDate',
+                'email': 'admin@mail.ru',
+                'password': '0000'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/users/2')
+                    .put('/api/v1/profile/update')
                     .send(data)
                     .expect(200, done);
             });
@@ -269,7 +296,7 @@ describe('PUT requests', function () {
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/users/51/notes/9')
+                    .put('/api/v1/profile/notes/1')
                     .send(data)
                     .expect(200, done);
             });
@@ -279,11 +306,13 @@ describe('PUT requests', function () {
     describe('Tags', function () {
         describe('Update tag', function () {
             let data = {
-                'body': 'newBody'
+                'body': 'newBody',
+                'email': 'admin@mail.ru',
+                'password': '0000'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/users/:id/notes/:id/tags/1')
+                    .put('/api/v1/profile/notes/1/tags/1')
                     .send(data)
                     .expect(200, done);
             });
@@ -294,9 +323,14 @@ describe('PUT requests', function () {
 describe('DELETE requests', function () {
     describe('Users', function () {
         describe('Delete user', function () {
+            let data = {
+                'email': 'test@mail.ru',
+                'password': '0000'
+            };
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/users/2')
+                    .delete('/api/v1/profile/delete')
+                    .send(data)
                     .expect(200, done);
             });
         });
@@ -310,7 +344,7 @@ describe('DELETE requests', function () {
             };
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/notes/9')
+                    .delete('/api/v1/profile/notes/1')
                     .send(data)
                     .expect(200, done);
             });
@@ -319,9 +353,14 @@ describe('DELETE requests', function () {
 
     describe('Tags', function () {
         describe('Delete tag', function () {
+            let data = {
+                'email': 'admin@mail.ru',
+                'password': '0000'
+            };
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/users/:id/notes/:id/tags/1')
+                    .delete('/api/v1/profile/notes/1/tags/1')
+                    .send(data)
                     .expect(200, done);
             });
         });
@@ -340,14 +379,18 @@ describe('Authentication', function () {
             });
     });
 
-    it('should redirect to "/"', function (done) {
-        request(app)
-            .post('/login')
-            .field('email', 'admin@mail.ru')
-            .field('password', '0000')
-            .end(function (err) {
-                expect('Location', '/');
-                done(err);
+    it('should redirect to "/profile"', function (done) {
+        const agent = superagent.agent(app);
+
+        agent.post('http://localhost:3000/login')
+            .type('form')
+            .query({'email': 'admin@mail.ru', 'password': '0000'})
+            .then(res => {
+                expect(res.text).to.include('Profile Page');
+                done();
+            })
+            .catch(err => {
+                throw err;
             });
     });
 
@@ -378,19 +421,6 @@ describe('Authentication', function () {
             })
             .catch(err => {
                 throw err;
-            });
-    });
-});
-
-describe('Registration', function () {
-    it('should return signup page', function (done) {
-        request(app)
-            .get('/signup')
-            .expect('Content-type', 'text/html; charset=utf-8')
-            .expect(200)
-            .end(function (err, res) {
-                expect(res.text).to.include('Signup');
-                done(err);
             });
     });
 });
