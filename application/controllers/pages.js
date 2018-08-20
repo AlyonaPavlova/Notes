@@ -1,6 +1,6 @@
 exports.home = function (req, res) {
     res.render('pages/home', {
-        message: 'Храните ваши заметки у нас. Легко и просто!'
+        message: 'Keep your notes with us. Simply and easily!'
     });
 };
 
