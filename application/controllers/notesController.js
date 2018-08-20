@@ -24,14 +24,15 @@ async function getAllNotes (req, res, next) {
     try {
         const db = await dbPromise;
         const notes = await Note.getAllNotes(db);
-        let note;
 
+        let notesList =[];
         notes.forEach((oneNote) => {
-            note = oneNote;
+            let note = res.render('pages/note.ejs', {
+                note : oneNote
+            });
+            notesList.push(note);
         });
-        res.render('pages/note.ejs', {
-            note : note
-        });
+        res.render('pages/notes-list.ejs', {notesList});
     } catch (err) {
         next(err);
     }
@@ -56,7 +57,7 @@ async function getNote (req, res, next) {
             res.status(404);
             res.send('404: Note Not Found');
         }
-        res.render('pages/note.ejs', {
+        res.render('pages/notes-list.ejs', {
             note : note
         });
     } catch (err) {
