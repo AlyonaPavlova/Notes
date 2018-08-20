@@ -23,5 +23,5 @@ exports.newNote = function (req, res) {
 };
 
 exports.logs = function (req, res) {
-    res.render('pages/logs')
+    res.render('pages/logs');
 };

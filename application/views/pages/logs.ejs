@@ -4,11 +4,11 @@
     <title>Test socket.io</title>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io.connect('http://localhost');
+        const socket = io.connect('http://localhost:3000');
         socket.on('eventClient', function (data) {
             console.log(data);
         });
-        socket.emit('eventServer', { data: 'Hello Server' });
+        socket.emit('eventServer', 'Hello Server');
     </script>
 </head>
 <body>
