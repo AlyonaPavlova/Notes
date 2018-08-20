@@ -1,0 +1,31 @@
+        <div class="list-group-item flex-column align-items-start container">
+            <div class="row">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="col-md-6">Note</h5>
+                    <div class="col-md-6 buttons_form row d-flex flex-row-reverse">
+                        <button
+                                (click)="oneDelete()"
+                                type="button"
+                                class="btn btn-outline-danger col-md-4 ml-2 mb-2"
+                        >Delete</button>
+                        <button
+                                (click)="oneDone()"
+                                type="button"
+                                class="btn btn-outline-success col-md-4 ml-2 mb-2"
+                                id="button_done"
+                        >Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="d-flex w-100 justify-content-between">
+                    <p class="col-md-8">Description</p>
+                    <small class="col-md-2"></small>
+                    <button class="btn btn-success btn-sm"><i class="fa fa-thumbs-up col-md-1" aria-hidden="true"></i></button>
+                    <button class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down col-md-1" aria-hidden="true"></i></button>
+                </div>
+            </div>
+    </div>
+
+

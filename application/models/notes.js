@@ -34,6 +34,10 @@ class Note {
     static delete(db, id) {
         db.run('DELETE FROM note WHERE id = ?', id);
     }
+
+    static noteState(db, state, id) {
+        db.run('UPDATE FROM note_has_user_like SET state ="' + state + '" WHERE note_id = ?', id);
+    }
 }
 
 module.exports = {Note};
