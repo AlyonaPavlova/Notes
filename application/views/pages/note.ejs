@@ -1,7 +1,9 @@
-        <div class="list-group-item flex-column align-items-start container">
+<% layout('../layout') -%>
+
+<div class="list-group-item flex-column align-items-start container">
             <div class="row">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="col-md-6">Note</h5>
+                    <h5 class="col-md-6">№<%= note.id %></h5>
                     <div class="col-md-6 buttons_form row d-flex flex-row-reverse">
                         <button
                                 (click)="oneDelete()"
@@ -20,10 +22,10 @@
 
             <div class="row">
                 <div class="d-flex w-100 justify-content-between">
-                    <p class="col-md-8">Description</p>
-                    <small class="col-md-2"></small>
-                    <button class="btn btn-success btn-sm"><i class="fa fa-thumbs-up col-md-1" aria-hidden="true"></i></button>
-                    <button class="btn btn-danger btn-sm"><i class="fa fa-thumbs-down col-md-1" aria-hidden="true"></i></button>
+                    <p class="col-md-6"><%= note.body %></p>
+                    <small class="col-md-4"><%= note.creation_date %></small>
+                    <button class="btn btn-success btn-sm" onclick="noteStateLike"><i class="fa fa-thumbs-up col-md-1" aria-hidden="true"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="noteStateDislike"><i class="fa fa-thumbs-down col-md-1" aria-hidden="true"></i></button>
                 </div>
             </div>
     </div>

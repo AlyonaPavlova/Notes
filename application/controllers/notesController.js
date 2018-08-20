@@ -24,7 +24,14 @@ async function getAllNotes (req, res, next) {
     try {
         const db = await dbPromise;
         const notes = await Note.getAllNotes(db);
-        res.send(notes);
+        let note;
+
+        notes.forEach((oneNote) => {
+            note = oneNote;
+        });
+        res.render('pages/note.ejs', {
+            note : note
+        });
     } catch (err) {
         next(err);
     }
@@ -49,7 +56,9 @@ async function getNote (req, res, next) {
             res.status(404);
             res.send('404: Note Not Found');
         }
-        res.send(note);
+        res.render('pages/note.ejs', {
+            note : note
+        });
     } catch (err) {
         next(err);
     }
@@ -75,4 +84,26 @@ async function deleteNote (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote};
+async function noteStateLike (req, res, next) {
+    try {
+        const state = true;
+        const db = await dbPromise;
+        await Note.noteState(db, state, req.params.noteId);
+        res.end();
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function noteStateDislike (req, res, next) {
+    try {
+        const state = false;
+        const db = await dbPromise;
+        await Note.noteState(db, state, req.params.noteId);
+        res.end();
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteStateLike, noteStateDislike};
