@@ -24,15 +24,7 @@ async function getAllNotes (req, res, next) {
     try {
         const db = await dbPromise;
         const notes = await Note.getAllNotes(db);
-
-        let notesList =[];
-        notes.forEach((oneNote) => {
-            let note = res.render('pages/note.ejs', {
-                note : oneNote
-            });
-            notesList.push(note);
-        });
-        res.render('pages/notes-list.ejs', {notesList});
+        res.send(notes);
     } catch (err) {
         next(err);
     }
@@ -41,9 +33,37 @@ async function getAllNotes (req, res, next) {
 async function getPersonalNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.getPersonalNotes(db, req.params.id);
+        const notes = await Note.getPersonalNotes(db, req.user.id);
         res.send(notes);
+        console.log(notes);
     } catch (err) {
+        next(err);
+    }
+}
+
+async function getNotesWithLikes (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const notes = getPersonalNotes;
+        let notesWithLikes = [];
+
+        notes.forEach(async function (note) {
+            const noteId = await Note.getNoteIdWithLike(db, note.id);
+            const noteWithLike = await Note.getNote(db, noteId);
+            notesWithLikes.push(noteWithLike);
+        });
+
+        res.send(notesWithLikes);
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getNumberNotesWithLikes (req, res, next) {
+    try {
+        const numberNotes = getNotesWithLikes.length;
+        res.send(numberNotes);
+    } catch {
         next(err);
     }
 }
@@ -108,4 +128,4 @@ async function noteState (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNotesWithLikes, getNumberNotesWithLikes};
