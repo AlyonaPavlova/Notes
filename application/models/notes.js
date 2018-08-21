@@ -36,7 +36,7 @@ class Note {
     }
 
     static noteState(db, state, id) {
-        db.run('UPDATE FROM note_has_user_like SET state ="' + state + '" WHERE note_id = ?', id);
+        db.run('UPDATE note_has_user_like SET state ="' + state + '" WHERE note_id = ?', id);
     }
 }
 

@@ -3,6 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 
 const Users = require('../controllers/usersController');
+const Notes = require('../controllers/notesController');
 const pages = require('../controllers/pages');
 const authenticationMiddleware = require('../authenticate/middleware');
 

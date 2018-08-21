@@ -42,6 +42,7 @@ api.route('/api/v1/profile/notes/new')
 
 api.route('/api/v1/profile/notes/:noteId')
     .get(Notes.getNote)
+    .post(Notes.noteState)
     .put(
         passport.authenticate('local-login'),
         authenticationMiddleware,

@@ -85,26 +85,27 @@ async function deleteNote (req, res, next) {
     }
 }
 
-async function noteStateLike (req, res, next) {
+async function noteState (req, res, next) {
     try {
-        const state = true;
+        getNote;
+        let state;
+
+        if (req.body.true === undefined) {
+            state = 0;
+        }
+        else {
+            state = 1;
+        }
         const db = await dbPromise;
         await Note.noteState(db, state, req.params.noteId);
-        res.end();
+
+        const note = await Note.getNote(db, req.params.noteId);
+        res.render('pages/notes-list.ejs', {
+            note : note
+        });
     } catch (err) {
         next(err);
     }
 }
 
-async function noteStateDislike (req, res, next) {
-    try {
-        const state = false;
-        const db = await dbPromise;
-        await Note.noteState(db, state, req.params.noteId);
-        res.end();
-    } catch (err) {
-        next(err);
-    }
-}
-
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteStateLike, noteStateDislike};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState};

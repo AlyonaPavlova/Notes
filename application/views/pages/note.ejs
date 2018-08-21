@@ -9,16 +9,18 @@
 
 <div class="row">
     <div class="d-flex w-100 justify-content-between">
-        <p class="col-md-10"><%= note.body %></p>
-        <div class="col-md-1 p-0">
-            <button class="btn btn-link icon-align text-danger ml-4 pr-4" onclick="noteStateDislike"><i class="fa fa-thumbs-down fa-lg"></i></button>
-            <button class="btn btn-link icon-align text-success" onclick="noteStateLike"><i class="fa fa-thumbs-up fa-lg"></i></button>
-        </div>
+        <p class="col-md-11"><%= note.body %></p>
+        <form action="/api/v1/profile/notes/<%= note.id %>" method="post" class="col-md-1 row">
+            <button type="submit" class="col-md-6 btn btn-link icon-align text-danger" name="false"><i class="fa fa-thumbs-down fa-lg"></i></button>
+            <button type="submit" class="col-md-6 btn btn-link icon-align text-success" name="true"><i class="fa fa-thumbs-up fa-lg"></i></button>
+        </form>
     </div>
 </div>
 <div>
     <small class="text-center"><%= note.creation_date %></small>
 </div>
+
+
 
 
 
