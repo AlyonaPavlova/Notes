@@ -1,3 +1,6 @@
+const redis = require('redis');
+const client = redis.createClient();
+
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
 
@@ -48,7 +51,7 @@ async function getNumberNotesLikes (req, res, next) {
         let numberOneNoteLikes = 0;
         let numberAllNotesLikes = 0;
 
-        for(let i = 0; i<notes.length; i++) {
+        for(let i = 0; i < notes.length; i++) {
             let oneNoteArr = await Note.getAllVotes(db, notes[i].id);
             let oneNoteWithLikeArr = oneNoteArr.filter(function (item) {
                 return item.state === 1;
@@ -56,6 +59,29 @@ async function getNumberNotesLikes (req, res, next) {
             numberOneNoteLikes = oneNoteWithLikeArr.length;
             numberAllNotesLikes += numberOneNoteLikes;
         }
+
+        client.set(req.user.id, numberAllNotesLikes, function (err) {
+            if (err) {
+                console.log('Error: ' + err);
+                client.quit();
+            }
+            else {
+                client.get(req.user.id, function (err, value) {
+                    client.quit();
+                    if (err) {
+                        console.log('Error: ' + err);
+                    }
+                    else if (value) {
+                        console.log('Key (user.id): ' + req.user.id);
+                        console.log('Value (number of notes like): ' + value);
+                    }
+                    else  {
+                        console.log('Key not found');
+                    }
+                });
+            }
+        });
+
         res.json(numberAllNotesLikes);
     } catch (err) {
         next(err);
