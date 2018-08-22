@@ -35,35 +35,29 @@ async function getPersonalNotes (req, res, next) {
         const db = await dbPromise;
         const notes = await Note.getPersonalNotes(db, req.user.id);
         res.send(notes);
-        console.log(notes);
     } catch (err) {
         next(err);
     }
 }
 
-async function getNotesWithLikes (req, res, next) {
+async function getNumberNotesLikes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = getPersonalNotes;
-        let notesWithLikes = [];
+        const notes = await Note.getPersonalNotes(db, req.user.id);
 
-        notes.forEach(async function (note) {
-            const noteId = await Note.getNoteIdWithLike(db, note.id);
-            const noteWithLike = await Note.getNote(db, noteId);
-            notesWithLikes.push(noteWithLike);
-        });
+        let numberOneNoteLikes = 0;
+        let numberAllNotesLikes = 0;
 
-        res.send(notesWithLikes);
+        for(let i = 0; i<notes.length; i++) {
+            let oneNoteArr = await Note.getAllVotes(db, notes[i].id);
+            let oneNoteWithLikeArr = oneNoteArr.filter(function (item) {
+                return item.state === 1;
+            });
+            numberOneNoteLikes = oneNoteWithLikeArr.length;
+            numberAllNotesLikes += numberOneNoteLikes;
+        }
+        res.json(numberAllNotesLikes);
     } catch (err) {
-        next(err);
-    }
-}
-
-async function getNumberNotesWithLikes (req, res, next) {
-    try {
-        const numberNotes = getNotesWithLikes.length;
-        res.send(numberNotes);
-    } catch {
         next(err);
     }
 }
@@ -128,4 +122,4 @@ async function noteState (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNotesWithLikes, getNumberNotesWithLikes};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes};

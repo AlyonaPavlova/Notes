@@ -32,13 +32,9 @@ api.get('/api/v1/profile/notes',
     authenticationMiddleware,
     Notes.getPersonalNotes);
 
-api.get('/api/v1/profile/notes/notesWithLikes',
+api.get('/api/v1/profile/notes/numberNotesLikes',
     authenticationMiddleware,
-    Notes.getNotesWithLikes);
-
-api.get('/api/v1/profile/notes/numberNoteLikes',
-    authenticationMiddleware,
-    Notes.getNumberNotesWithLikes);
+    Notes.getNumberNotesLikes);
 
 api.route('/api/v1/profile/notes/new')
     .get(pages.newNote)

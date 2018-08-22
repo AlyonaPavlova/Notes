@@ -39,8 +39,8 @@ class Note {
         db.run('UPDATE note_has_user_like SET state ="' + state + '" WHERE note_id = ?', id);
     }
 
-    static getNoteIdWithLike(db, id) {
-        return db.get('SELECT note_id FROM note_has_user_like WHERE note_id = ? AND state = 1', id);
+    static getAllVotes(db, id) {
+        return db.all('SELECT * FROM note_has_user_like WHERE note_id = ?', id);
     }
 }
 
