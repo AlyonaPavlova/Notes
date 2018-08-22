@@ -51,7 +51,7 @@ async function getNumberNotesLikes (req, res, next) {
         let numberOneNoteLikes = 0;
         let numberAllNotesLikes = 0;
 
-        for(let i = 0; i < notes.length; i++) {
+        for (let i = 0; i < notes.length; i++) {
             let oneNoteArr = await Note.getAllVotes(db, notes[i].id);
             let oneNoteWithLikeArr = oneNoteArr.filter(function (item) {
                 return item.state === 1;
