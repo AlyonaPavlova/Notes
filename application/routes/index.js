@@ -24,7 +24,13 @@ router.route('/login')
 
 router.route('/signup')
     .get(function (req, res) {
-        res.render('pages/signup.ejs', {message: req.flash('error') });
+        res.render('pages/signup.ejs', {
+            message: req.flash('error'),
+            email: req.flash('email'),
+            name: req.flash('name'),
+            phone: req.flash('phone'),
+            birth_date: req.flash('birth_date')
+        });
     })
     .post(Users.create);
 
