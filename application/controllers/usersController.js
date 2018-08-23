@@ -6,6 +6,30 @@ const {User} = require('../models/users');
 async function create (req, res, next) {
     try {
         const db = await dbPromise;
+        const data = {
+            email: req.body.email,
+            password: req.body.password,
+            name: req.body.name
+        };
+
+        function getPageTemplate (field) {
+            req.flash('error', 'Please, enter your ' + field);
+            return res.render('pages/signup.ejs', {
+                message: req.flash('error'),
+                email: req.body.email,
+                name: req.body.name,
+                phone: req.body.phone,
+                birth_date: req.body.birth_date
+            });
+        }
+
+        if (!req.body.email || !req.body.password || !req.body.name) {
+            for (let i in data) {
+                if (!data[i]) {
+                    return getPageTemplate(i);
+                }
+            }
+        }
 
         if (!req.body.email) {
             req.flash('error', 'Please, enter your email');
