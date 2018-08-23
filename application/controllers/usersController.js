@@ -29,37 +29,7 @@ async function create (req, res, next) {
                     return getPageTemplate(i);
                 }
             }
-        }
-
-        if (!req.body.email) {
-            req.flash('error', 'Please, enter your email');
-            return res.render('pages/signup.ejs', {
-                message: req.flash('error'),
-                name: req.body.name,
-                phone: req.body.phone,
-                birth_date: req.body.birth_date
-            });
-        }
-        if (!req.body.password) {
-            req.flash('error', 'Please, enter your password');
-            return res.render('pages/signup.ejs', {
-                message: req.flash('error'),
-                email: req.body.email,
-                name: req.body.name,
-                phone: req.body.phone,
-                birth_date: req.body.birth_date
-            });
-        }
-        if (!req.body.name) {
-            req.flash('error', 'Please, enter your name');
-            return res.render('pages/signup.ejs', {
-                message: req.flash('error'),
-                email: req.body.email,
-                phone: req.body.phone,
-                birth_date: req.body.birth_date
-            });
-        }
-        else {
+        } else {
             const hashedPassword = await new Promise((resolve, reject) => {
                 bcrypt.genSalt(10, (err, salt) => {
                     if (err) {
