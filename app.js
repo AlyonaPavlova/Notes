@@ -65,6 +65,10 @@ app.use(flash());
 app.use(function(req, res, next){
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.email = req.flash('email');
+    res.locals.name = req.flash('name');
+    res.locals.phone = req.flash('phone');
+    res.locals.birth_date = req.flash('birth_date');
     next();
 });
 app.use(router, api);
