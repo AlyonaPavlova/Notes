@@ -46,43 +46,11 @@ async function getPersonalNotes (req, res, next) {
 async function getNumberNotesLikes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.getPersonalNotes(db, req.user.id);
+        const numberAllNotesLikes = await Note.getNumberNotesLikes(db, req.user.id);
 
-        let numberOneNoteLikes = 0;
-        let numberAllNotesLikes = 0;
+        client.set(req.user.id, numberAllNotesLikes['count(*)'], redis.print);
 
-        for(let i = 0; i < notes.length; i++) {
-            let oneNoteArr = await Note.getAllVotes(db, notes[i].id);
-            let oneNoteWithLikeArr = oneNoteArr.filter(function (item) {
-                return item.state === 1;
-            });
-            numberOneNoteLikes = oneNoteWithLikeArr.length;
-            numberAllNotesLikes += numberOneNoteLikes;
-        }
-
-        client.set(req.user.id, numberAllNotesLikes, function (err) {
-            if (err) {
-                console.log('Error: ' + err);
-                client.quit();
-            }
-            else {
-                client.get(req.user.id, function (err, value) {
-                    client.quit();
-                    if (err) {
-                        console.log('Error: ' + err);
-                    }
-                    else if (value) {
-                        console.log('Key (user.id): ' + req.user.id);
-                        console.log('Value (number of notes like): ' + value);
-                    }
-                    else  {
-                        console.log('Key not found');
-                    }
-                });
-            }
-        });
-
-        res.json(numberAllNotesLikes);
+        res.json(numberAllNotesLikes['count(*)']);
     } catch (err) {
         next(err);
     }
