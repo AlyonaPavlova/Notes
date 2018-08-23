@@ -33,9 +33,9 @@ CREATE TABLE note_has_tag (
 );
 
 CREATE TABLE note_has_user_like (
-  user_id INTEGER PRIMARY KEY NOT NULL,
-  note_id INTEGER NOT NULL,
-  state TINYINT NOT NULL,
+  note_id INTEGER PRIMARY KEY NOT NULL,
+  user_id INTEGER NOT NULL,
+  state TINYINT,
   FOREIGN KEY (user_id) REFERENCES user(id),
   FOREIGN KEY (note_id) REFERENCES note(id)
 );

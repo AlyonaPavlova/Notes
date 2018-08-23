@@ -1,3 +1,6 @@
+const redis = require('redis');
+const client = redis.createClient();
+
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
 
@@ -33,8 +36,21 @@ async function getAllNotes (req, res, next) {
 async function getPersonalNotes (req, res, next) {
     try {
         const db = await dbPromise;
-        const notes = await Note.getPersonalNotes(db, req.params.id);
+        const notes = await Note.getPersonalNotes(db, req.user.id);
         res.send(notes);
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getNumberNotesLikes (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const numberAllNotesLikes = await Note.getNumberNotesLikes(db, req.user.id);
+
+        client.set(req.user.id, numberAllNotesLikes['count(*)'], redis.print);
+
+        res.json(numberAllNotesLikes['count(*)']);
     } catch (err) {
         next(err);
     }
@@ -49,7 +65,9 @@ async function getNote (req, res, next) {
             res.status(404);
             res.send('404: Note Not Found');
         }
-        res.send(note);
+        res.render('pages/notes-list.ejs', {
+            note : note
+        });
     } catch (err) {
         next(err);
     }
@@ -75,4 +93,27 @@ async function deleteNote (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote};
+async function noteState (req, res, next) {
+    try {
+        getNote;
+        let state;
+
+        if (req.body.true === undefined) {
+            state = 0;
+        }
+        else {
+            state = 1;
+        }
+        const db = await dbPromise;
+        await Note.noteState(db, state, req.params.noteId);
+
+        const note = await Note.getNote(db, req.params.noteId);
+        res.render('pages/notes-list.ejs', {
+            note : note
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes};

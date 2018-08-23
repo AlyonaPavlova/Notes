@@ -29,9 +29,13 @@ api.delete('/api/v1/profile/delete',
     Users.deleteUser);
 
 api.get('/api/v1/profile/notes',
-    passport.authenticate('local-login'),
     authenticationMiddleware,
     Notes.getPersonalNotes);
+
+api.get('/api/v1/profile/notes/numberNotesLikes',
+    authenticationMiddleware,
+    Notes.getNumberNotesLikes);
+
 api.route('/api/v1/profile/notes/new')
     .get(pages.newNote)
     .post(
@@ -42,6 +46,7 @@ api.route('/api/v1/profile/notes/new')
 
 api.route('/api/v1/profile/notes/:noteId')
     .get(Notes.getNote)
+    .post(Notes.noteState)
     .put(
         passport.authenticate('local-login'),
         authenticationMiddleware,

@@ -3,6 +3,7 @@ const passport = require('passport');
 const router = express.Router();
 
 const Users = require('../controllers/usersController');
+const Notes = require('../controllers/notesController');
 const pages = require('../controllers/pages');
 const authenticationMiddleware = require('../authenticate/middleware');
 
@@ -10,6 +11,7 @@ router.get('/', function (req, res) { res.redirect('home');});
 router.get('/home', pages.home);
 router.get('/features', pages.features);
 router.get('/news', pages.news);
+router.get('/logs', pages.logs);
 
 router.route('/login')
     .get(function (req, res) {
