@@ -43,6 +43,16 @@ async function getPersonalNotes (req, res, next) {
     }
 }
 
+async function getLastTenNotes (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const notes = await Note.getLastTenNotes(db, req.user.id);
+        res.send(notes);
+    } catch (err) {
+        next(err);
+    }
+}
+
 async function getNumberNotesLikes (req, res, next) {
     try {
         const db = await dbPromise;
@@ -116,4 +126,4 @@ async function noteState (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes, getLastTenNotes};

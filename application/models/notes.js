@@ -19,6 +19,10 @@ class Note {
         return db.all('SELECT * FROM note WHERE author_id = ?', user_id);
     }
 
+    static getLastTenNotes(db, user_id) {
+        return db.all('SELECT * FROM note WHERE author_id = ? ORDER BY id DESC LIMIT 10', user_id);
+    }
+
     static getNote(db, id) {
         return db.get('SELECT * FROM note WHERE id = ?', id);
     }
