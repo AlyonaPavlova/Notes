@@ -1,8 +1,13 @@
 const redis = require('redis');
-const client = redis.createClient();
+const client = redis.createClient({
+    host: '127.0.0.1',
+    port: 6379,
+    database: 2
+});
 
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
+const {User} = require('../models/users');
 
 const date = new Date( Date.now());
 
@@ -59,8 +64,22 @@ async function getNumberNotesLikes (req, res, next) {
         const numberAllNotesLikes = await Note.getNumberNotesLikes(db, req.user.id);
 
         client.set(req.user.id, numberAllNotesLikes['count(*)'], redis.print);
+        client.get(req.user.id, function(error, result) {
+            if (error) throw error;
+            console.log('GET result ->', result)
+        });
 
         res.json(numberAllNotesLikes['count(*)']);
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getRating (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const users = await User.getAllUsers(db);
+
     } catch (err) {
         next(err);
     }
@@ -126,4 +145,4 @@ async function noteState (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes, getLastTenNotes};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes, getLastTenNotes, getRating};
