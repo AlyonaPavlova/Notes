@@ -26,6 +26,7 @@
   "dependencies": {
     "@nestjs/graphql": "^3.0.0",
     "@tsed/socketio": "^4.30.1",
+    "@types/mongodb": "^3.1.4",
     "@types/socket.io": "^1.4.36",
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",

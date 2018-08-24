@@ -38,6 +38,10 @@ class User {
     static find(db, email) {
         return db.get('SELECT * FROM user WHERE email = ?', email);
     }
+
+    static saveMongoDoc() {
+
+    }
 }
 
 module.exports = {User};

@@ -258,7 +258,7 @@ describe('POST requests', function () {
             };
             it('respond with 201 created', function (done) {
                 request(app)
-                    .post('/api/v1/profile/notes/1/tags/new')
+                    .post('/api/v1/profile/notes/26/tags/new')
                     .send(data)
                     .expect(201, done);
             });

@@ -12,6 +12,10 @@ class Tag {
         return db.all('SELECT * FROM tag WHERE note_id = ?', note_id);
     }
 
+    static getPersonalTags(db, user_id) {
+        return db.all('SELECT tag.body FROM note INNER JOIN tag ON note.id = tag.note_id WHERE note.author_id = ?', user_id)
+    }
+
     static update(db, body, id) {
         db.run('UPDATE tag SET body ="' + body + '" WHERE id = ?', id);
     }

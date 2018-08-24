@@ -29,6 +29,16 @@ async function getAllTags (req, res, next) {
     }
 }
 
+async function getPersonalTags (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const tags = await Tag.getPersonalTags(db, req.user.id);
+        res.send(tags);
+    } catch (err) {
+        next(err);
+    }
+}
+
 async function update (req, res, next) {
     try {
         const db = await dbPromise;
@@ -49,4 +59,4 @@ async function deleteTag (req, res, next) {
     }
 }
 
-module.exports = {create, getAllTags, update, deleteTag};
+module.exports = {create, getAllTags, getPersonalTags, update, deleteTag};
