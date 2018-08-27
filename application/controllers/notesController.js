@@ -67,6 +67,19 @@ async function getNumberNotesLikes (req, res, next) {
     }
 }
 
+async function getNumberNotesLikesForLastTenNotes (req, res, next) {
+    try {
+        const db = await dbPromise;
+        const numberAllNotesLikes = await Note.getNumberNotesLikesForLastTenNotes(db, req.user.id);
+
+        client.multi().select(1).zadd('likesForTenNotes', numberAllNotesLikes['count(*)'], req.user.id).exec();
+
+        res.json(numberAllNotesLikes['count(*)']);
+    } catch (err) {
+        next(err);
+    }
+}
+
 async function getRating (req, res, next) {
     try {
         client.multi().select(1).zrevrange('likes', 0, 99).exec(function (err, idsArr) {
@@ -78,7 +91,38 @@ async function getRating (req, res, next) {
                 }
             });
         });
+    } catch (err) {
+        next(err);
+    }
+}
 
+async function getRatingForLastTenNotes (req, res, next) {
+    try {
+        client.multi().select(1).zrevrange('likesForTenNotes', 0, 99).exec(function (err, idsArr) {
+            idsArr[1].forEach(function (i, id) {
+                if (+id === req.user.id) {
+                    console.log('User rating ' + id + ' is ' + i);
+                } else {
+                    console.log('The user does not have enough likes to participate in the rating.');
+                }
+            });
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function getRatingForLastTenNotes (req, res, next) {
+    try {
+        client.multi().select(1).zrevrange('likes', 0, 99).exec(function (err, idsArr) {
+            idsArr[1].forEach(function (i, id) {
+                if (+id === req.user.id) {
+                    console.log('User rating ' + id + ' is ' + i);
+                } else {
+                    console.log('The user does not have enough likes to participate in the rating.');
+                }
+            });
+        });
     } catch (err) {
         next(err);
     }
@@ -144,4 +188,4 @@ async function noteState (req, res, next) {
     }
 }
 
-module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes, getLastTenNotes, getRating};
+module.exports = {create, getAllNotes, getPersonalNotes, getNote, update, deleteNote, noteState, getNumberNotesLikes, getLastTenNotes, getRating, getNumberNotesLikesForLastTenNotes, getRatingForLastTenNotes};
