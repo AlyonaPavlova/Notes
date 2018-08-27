@@ -47,12 +47,6 @@ class Note {
         return db.get('SELECT count(*) FROM (SELECT * FROM note LEFT JOIN note_has_user_like ' +
             'ON note.id = note_has_user_like.note_id WHERE note.author_id = ? AND note_has_user_like.state = 1)', user_id);
     }
-
-    static rating(db) {
-        // return db.all('SELECT * FROM user LEFT JOIN ')
-        return db.get('SELECT count(*) FROM (SELECT * FROM note LEFT JOIN note_has_user_like ' +
-            'ON note.id = note_has_user_like.note_id WHERE note_has_user_like.state = 1)');
-    }
 }
 
 module.exports = {Note};

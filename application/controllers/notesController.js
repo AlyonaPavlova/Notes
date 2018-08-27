@@ -1,9 +1,5 @@
 const redis = require('redis');
-const client = redis.createClient({
-    host: '127.0.0.1',
-    port: 6379,
-    database: 2
-});
+const client = redis.createClient();
 
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
@@ -63,11 +59,7 @@ async function getNumberNotesLikes (req, res, next) {
         const db = await dbPromise;
         const numberAllNotesLikes = await Note.getNumberNotesLikes(db, req.user.id);
 
-        client.set(req.user.id, numberAllNotesLikes['count(*)'], redis.print);
-        client.get(req.user.id, function(error, result) {
-            if (error) throw error;
-            console.log('GET result ->', result)
-        });
+        client.multi().select(1).zadd('likes', numberAllNotesLikes['count(*)'], req.user.id).exec();
 
         res.json(numberAllNotesLikes['count(*)']);
     } catch (err) {
@@ -77,8 +69,15 @@ async function getNumberNotesLikes (req, res, next) {
 
 async function getRating (req, res, next) {
     try {
-        const db = await dbPromise;
-        const users = await User.getAllUsers(db);
+        client.multi().select(1).zrevrange('likes', 0, 99).exec(function (err, idsArr) {
+            idsArr[1].forEach(function (i, id) {
+                if (+id === req.user.id) {
+                    console.log('User rating ' + id + ' is ' + i);
+                } else {
+                    console.log('The user does not have enough likes to participate in the rating.');
+                }
+            });
+        });
 
     } catch (err) {
         next(err);

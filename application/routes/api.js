@@ -33,6 +33,10 @@ api.get('/api/v1/profile/notes/numberNotesLikes',
     authenticationMiddleware,
     Notes.getNumberNotesLikes);
 
+api.get('/api/v1/profile/notes/test',
+    authenticationMiddleware,
+    Notes.getRating);
+
 api.route('/api/v1/profile/notes/new')
     .get(pages.newNote)
     .post(
