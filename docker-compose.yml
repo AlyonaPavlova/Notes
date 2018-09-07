@@ -13,14 +13,14 @@ services:
     ports:
       - 27017:27017
 
-  socket:
-      image: node
-      ports:
-        - 5000:5000
+  kue:
+    image: kue
+    ports:
+      - 5000:5000
 
   web:
     build: .
-    image: node:0.12
+    image: node:latest
     working_dir: /usr/src/myapp
     volumes:
       - /src/app:/usr/src/myapp
@@ -29,3 +29,4 @@ services:
     links:
       - redis
       - mongo
+      - kue
