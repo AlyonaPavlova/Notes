@@ -47,7 +47,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     store: new RedisStore({
-        url: config.redisStore.url
+        // url: config.redisStore.url,
+        host: 'redis',
+        // host: config.redisStore.host
     }),
     cookie: {
         secure: false,

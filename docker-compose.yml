@@ -2,31 +2,30 @@ version: "3"
 
 services:
   redis:
+    container_name: redis
     image: redis
+    command: ["sudo redis-server", "/config/redis.conf"]
+
+  app:
+    container_name: app
+    build: .
     ports:
-      - 6379:6379
-    volumes:
-      - /data/redis:/data
+      - 3000:3000
+    depends_on:
+      - redis
+      - mongo
 
   mongo:
+    container_name: mongo
     image: mongo
     ports:
       - 27017:27017
 
-  kue:
-    image: kue
-    ports:
-      - 5000:5000
-
-  web:
-    build: .
-    image: node:latest
-    working_dir: /usr/src/myapp
-    volumes:
-      - /src/app:/usr/src/myapp
-    ports:
-      - 80:3000
-    links:
-      - redis
-      - mongo
-      - kue
+#  kue:
+#    build: .
+#    image: kue
+#    command: ["npm", "run", "kue"]
+#    ports:
+#      - 5000:5000
+#    links:
+#      - redis
