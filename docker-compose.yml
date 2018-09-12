@@ -1,11 +1,6 @@
 version: "3"
 
 services:
-  redis:
-    container_name: redis
-    image: redis
-    command: ["sudo redis-server", "/config/redis.conf"]
-
   app:
     container_name: app
     build: .
@@ -14,6 +9,16 @@ services:
     depends_on:
       - redis
       - mongo
+
+  redis:
+    container_name: redis
+    image: redis
+    volumes:
+      - ./config/redis.conf:/usr/src/app/node_modules/redis-server/redis.conf
+    command:
+      - /usr/src/app/node_modules/redis-server/redis.conf
+    ports:
+      - 6379:6379
 
   mongo:
     container_name: mongo
