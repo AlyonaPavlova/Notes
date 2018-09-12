@@ -9,8 +9,6 @@ const passport = require('passport');
 const session = require('express-session');
 const flash = require('connect-flash');
 const RedisStore = require('connect-redis')(session);
-const redis = require('redis');
-const client  = redis.createClient({host: 'redis', port: 6379});
 const helmet = require('helmet');
 
 const {router} = require('./application/routes/index');
@@ -50,8 +48,7 @@ app.use(session({
     saveUninitialized: true,
     store: new RedisStore({
         // url: config.redisStore.url,
-        host: 'redis',
-        // client: client,
+        host: 'redis'
     }),
     cookie: {
         secure: false,

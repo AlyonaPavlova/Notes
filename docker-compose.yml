@@ -25,12 +25,3 @@ services:
     image: mongo
     ports:
       - 27017:27017
-
-#  kue:
-#    build: .
-#    image: kue
-#    command: ["npm", "run", "kue"]
-#    ports:
-#      - 5000:5000
-#    links:
-#      - redis
