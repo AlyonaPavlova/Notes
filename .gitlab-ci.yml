@@ -1,4 +1,80 @@
+image: registry.gitlab.lc:5000/develop/ed:tmaier-dc-ssh
+services:
+  - registry.gitlab.lc:5000/develop/ed:my-docker-dind
+
+variables:
+  variables:
+    DOCKER_DRIVER: overlay
+    CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/develop/ed:$CI_COMMIT_REF_SLUG.sources.last
+    BUILD: docker-compose -f ./docker-compose.yml
+    DC_FILE: ./docker/docker-compose-staging.yml
+    ENV_FILE: ./docker/.env.staging.lc
+
 stages:
-  - test
+  - spawn
   - build
+  - test
+  - release
   - deploy
+  - clean
+
+spawn:
+  stage: spawn
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - $BUILD up -d
+  only:
+    -docker
+
+compile:
+  stage: build
+  script:
+    - echo 'Build'
+
+test:
+  stage: test
+  dependencies:
+    - compile
+  script: make test
+  artifacts:
+    when: on_success
+    expire_in: 1h
+  only:
+    - docker
+
+release:
+  stage: release
+  dependencies:
+    - compile
+    - test
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  script:
+    - docker build -t $CONTAINER_RELEASE_IMAGE -f Dockerfile . --build-arg BRANCH_NAME=$CI_COMMIT_REF_SLUG
+  after_script:
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - docker
+
+deploy:
+  stage: deploy
+  before_script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  script:
+    - scp $ENV_FILE $DC_FILE provisioner@staging.lc:~/docker
+    - ssh provisioner@staging.lc 'bash -s' < ./docker/deploy.sh
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://www.$CI_COMMIT_REF_SLUG.labs.lc
+  only:
+    - docker
+
+cleanup:
+  stage: cleanup
+  when: always
+  script:
+    - $BUILD down
+  only:
+    - docker
