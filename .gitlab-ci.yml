@@ -1,0 +1,56 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+  BUILD: docker-compose -f ./docker-compose.yml
+
+stages:
+  - build
+  - test
+
+before_script:
+  - apk update && apk upgrade
+  - apk add python python-dev py-pip build-base
+  - docker run hello-world
+  - pip install docker-compose
+
+build:
+  stage: build
+  script:
+    - $BUILD build
+  artifacts:
+    paths:
+      - ./
+      - application/authenticate/
+      - application/controllers/
+      - application/models/
+      - application/routes/
+      - application/views/
+      - application/views/pages/
+      - application/layout.ejs
+      - application/navigation.ejs
+      - config/
+      - test/test.js
+    when: on_success
+    expire_in: 1h
+  only:
+    - gitlab
+    - master
+
+test:
+  stage: test
+  dependencies:
+    - build
+  script:
+    - $BUILD up -d
+    - apk add --update nodejs nodejs-npm
+    - npm install mocha
+    - docker exec app npm test
+  artifacts:
+    when: on_success
+    expire_in: 1h
+  only:
+    - gitlab
+    - master
