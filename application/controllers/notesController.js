@@ -1,9 +1,8 @@
 const redis = require('redis');
-const client = redis.createClient(6379, 'redis');
+const client = redis.createClient({ host: 'redis' });
 
 const {dbPromise} = require('../../db.js');
 const {Note} = require('../models/notes');
-const {User} = require('../models/users');
 
 const date = new Date( Date.now());
 
