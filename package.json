@@ -11,9 +11,7 @@
     "supertest": "^3.1.0"
   },
   "scripts": {
-    "test": "mocha",
-    "start": "nodemon server.js",
-    "kue": "nodemon kue.js"
+    "test": "mocha --exit"
   },
   "repository": {
     "type": "git",
@@ -60,6 +58,7 @@
     "mongoose": "^5.2.9",
     "morgan": "^1.9.0",
     "node-datetime": "^2.0.8",
+    "nodejs-npm": "latest",
     "parseurl": "latest",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
@@ -70,6 +69,7 @@
     "socket.io-client": "^2.1.1",
     "sqlite": "^2.9.2",
     "sqlite3": "latest",
+    "superagent": "3.8.3",
     "swagger-client": "^3.8.12",
     "swagger-js-codegen": "^1.12.0"
   }
