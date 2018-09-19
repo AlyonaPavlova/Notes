@@ -1,80 +1,56 @@
-image: registry.gitlab.lc:5000/develop/ed:tmaier-dc-ssh
+image: docker:latest
 services:
-  - registry.gitlab.lc:5000/develop/ed:my-docker-dind
+  - docker:dind
 
 variables:
-  variables:
-    DOCKER_DRIVER: overlay
-    CONTAINER_RELEASE_IMAGE: $CI_REGISTRY/develop/ed:$CI_COMMIT_REF_SLUG.sources.last
-    BUILD: docker-compose -f ./docker-compose.yml
-    DC_FILE: ./docker/docker-compose-staging.yml
-    ENV_FILE: ./docker/.env.staging.lc
+  DOCKER_DRIVER: overlay
+  BUILD: docker-compose -f ./docker-compose.yml
 
 stages:
-  - spawn
   - build
   - test
-  - release
-  - deploy
-  - clean
 
-spawn:
-  stage: spawn
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  script:
-    - $BUILD up -d
-  only:
-    -docker
+before_script:
+  - apk update && apk upgrade
+  - apk add python python-dev py-pip build-base
+  - docker run hello-world
+  - pip install docker-compose
 
-compile:
+build:
   stage: build
   script:
-    - echo 'Build'
+    - $BUILD build
+  artifacts:
+    paths:
+      - ./
+      - application/authenticate/
+      - application/controllers/
+      - application/models/
+      - application/routes/
+      - application/views/
+      - application/views/pages/
+      - application/layout.ejs
+      - application/navigation.ejs
+      - config/
+      - test/test.js
+    when: on_success
+    expire_in: 1h
+  only:
+    - gitlab
+    - master
 
 test:
   stage: test
   dependencies:
-    - compile
-  script: make test
+    - build
+  script:
+    - $BUILD up -d
+    - apk add --update nodejs nodejs-npm
+    - npm install mocha
+    - docker exec app npm test
   artifacts:
     when: on_success
     expire_in: 1h
   only:
-    - docker
-
-release:
-  stage: release
-  dependencies:
-    - compile
-    - test
-  before_script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  script:
-    - docker build -t $CONTAINER_RELEASE_IMAGE -f Dockerfile . --build-arg BRANCH_NAME=$CI_COMMIT_REF_SLUG
-  after_script:
-    - docker push $CONTAINER_RELEASE_IMAGE
-  only:
-    - docker
-
-deploy:
-  stage: deploy
-  before_script:
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$SSH_PRIVATE_KEY")
-  script:
-    - scp $ENV_FILE $DC_FILE provisioner@staging.lc:~/docker
-    - ssh provisioner@staging.lc 'bash -s' < ./docker/deploy.sh
-  environment:
-    name: review/$CI_COMMIT_REF_NAME
-    url: https://www.$CI_COMMIT_REF_SLUG.labs.lc
-  only:
-    - docker
-
-cleanup:
-  stage: cleanup
-  when: always
-  script:
-    - $BUILD down
-  only:
-    - docker
+    - gitlab
+    - master
