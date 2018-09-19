@@ -9,12 +9,12 @@ describe('GET requests', function () {
     this.timeout(5000);
 
     describe('Main pages', function () {
-        it('should contain text "Храните ваши заметки у нас. Легко и просто!"', function (done) {
+        it('should contain text "Keep your notes with us. Simply and easily!"', function (done) {
             request(app)
                 .get('/home')
                 .expect(200)
                 .end(function (err, res) {
-                    expect(res.text).to.include('Храните ваши заметки у нас. Легко и просто!');
+                    expect(res.text).to.include('Keep your notes with us. Simply and easily!');
                     done(err);
                 });
         });
@@ -49,7 +49,6 @@ describe('GET requests', function () {
                 });
         });
     });
-
     describe('API', function () {
         describe('Users', function () {
             describe('Correct users returned', function () {
@@ -77,10 +76,9 @@ describe('GET requests', function () {
                             expect(res.body).to.have.property('password');
                             expect(res.body.password).to.not.equal(null);
                             expect(res.body).to.have.property('name');
-                            expect(res.body.name).to.equal('Admin');
+                            expect(res.body.name).to.not.equal(null);
                             expect(res.body).to.have.property('phone');
                             expect(res.body).to.have.property('notes_count');
-                            expect(res.body.notes_count).to.equal(0);
                             expect(res.body).to.have.property('birth_date');
                             done(err);
                         });
@@ -95,6 +93,7 @@ describe('GET requests', function () {
                 });
             });
         });
+
         describe('Notes', function () {
             describe('Correct notes returned', function () {
                 it('should return list of all notes', function (done) {
@@ -107,65 +106,9 @@ describe('GET requests', function () {
                             done(err);
                         });
                 });
-
-                it('should return one note, should be an object with keys and values', function (done) {
-                    request(app)
-                        .get('/api/v1/notes/1')
-                        .expect('Content-type', /json/)
-                        .expect(200)
-                        .end(function (err, res) {
-                            expect(res.body).to.have.property('body');
-                            expect(res.body.body).to.not.equal(null);
-                            expect(res.body).to.have.property('author_id');
-                            expect(res.body.author_id).to.not.equal(null);
-                            expect(res.body).to.have.property('creation_date');
-                            expect(res.body.creation_date).to.not.equal(null);
-                            expect(res.body).to.have.property('tags_count');
-                            done(err);
-                        });
-                });
-            });
-
-            describe('Correct notes returned for one user', function () {
-                let data = {
-                    'email': 'admin@mail.ru',
-                    'password': '0000'
-                };
-                it('should return list of all notes for one user', function (done) {
-                    request(app)
-                        .get('/api/v1/profile/notes')
-                        .send(data)
-                        .expect('Content-type', /json/)
-                        .expect(200)
-                        .end(function (err, res) {
-                            expect(res.body).to.be.an('array');
-                            done(err);
-                        });
-                });
-
-                it('should return one note with id = 1 for one user', function (done) {
-                    let data = {
-                        'email': 'admin@mail.ru',
-                        'password': '0000'
-                    };
-                    request(app)
-                        .get('/api/v1/profile/notes/1')
-                        .send(data)
-                        .expect('Content-type', /json/)
-                        .expect(200)
-                        .end(function (err, res) {
-                            expect(res.body).to.have.property('body');
-                            expect(res.body.body).to.not.equal(null);
-                            expect(res.body).to.have.property('author_id');
-                            expect(res.body.author_id).to.not.equal(null);
-                            expect(res.body).to.have.property('creation_date');
-                            expect(res.body.creation_date).to.not.equal(null);
-                            expect(res.body).to.have.property('tags_count');
-                            done(err);
-                        });
-                });
             });
         });
+
         describe('Tags', function () {
             describe('Correct tags returned', function () {
                 it('should return list of all tags', function (done) {
@@ -189,7 +132,7 @@ describe('POST requests', function () {
     describe('Users', function () {
         describe('Create user', function () {
             let data = {
-                'email': 'mail@mail.ru',
+                'email': 'newuser@mail.ru',
                 'password': '1111',
                 'name': 'Name',
                 'phone': '11111',
@@ -199,34 +142,15 @@ describe('POST requests', function () {
                 request(app)
                     .post('/signup')
                     .send(data)
-                    .expect(201, done);
-            });
-        });
-
-        describe('Create user error', function () {
-            let data = {
-                'password': '1111',
-                'name': 'Name',
-            };
-            it('respond with 400 not created', function (done) {
-                const agent = superagent.agent(app);
-
-                agent.post('http://localhost:3000/signup')
-                    .send(data)
-                    .then(res => {
-                        expect(res.text).to.include('Please, enter your email');
-                        done();
-                    })
-                    .catch(err => {
-                        throw err;
-                    });
+                    .expect(302, done);
             });
         });
     });
+
     describe('Notes', function () {
         describe('Create note', function () {
             let data = {
-                'body': 'note\'s body',
+                'body': 'body',
                 'email': 'admin@mail.ru',
                 'password': '0000'
             };
@@ -234,23 +158,11 @@ describe('POST requests', function () {
                 request(app)
                     .post('/api/v1/profile/notes/new')
                     .send(data)
-                    .expect(200, done);
-            });
-        });
-
-        describe('Create note error', function () {
-            let data = {
-                'email': 'admin@mail.ru',
-                'password': '0000'
-            };
-            it('respond with 400 not created', function (done) {
-                request(app)
-                    .post('/api/v1/profile/notes/new')
-                    .send(data)
-                    .expect('400: Note Not Created', done);
+                    .expect(302, done);
             });
         });
     });
+
     describe('Tags', function () {
         describe('Create tag', function () {
             let data = {
@@ -260,7 +172,7 @@ describe('POST requests', function () {
                 request(app)
                     .post('/api/v1/profile/notes/26/tags/new')
                     .send(data)
-                    .expect(201, done);
+                    .expect(302, done);
             });
         });
     });
@@ -272,9 +184,9 @@ describe('PUT requests', function () {
     describe('Users', function () {
         describe('Update user', function () {
             let data = {
-                'name': 'newName',
-                'phone': 'newPhone',
-                'birth_date': 'newDate',
+                'name': 'NewName',
+                'phone': 'Phone',
+                'birth_date': 'Date',
                 'email': 'admin@mail.ru',
                 'password': '0000'
             };
@@ -282,7 +194,7 @@ describe('PUT requests', function () {
                 request(app)
                     .put('/api/v1/profile/update')
                     .send(data)
-                    .expect(200, done);
+                    .expect(302, done);
             });
         });
     });
@@ -290,15 +202,15 @@ describe('PUT requests', function () {
     describe('Notes', function () {
         describe('Update note', function () {
             let data = {
-                'body': 'newBody',
+                'body': 'Body',
                 'email': 'admin@mail.ru',
                 'password': '0000'
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/profile/notes/1')
+                    .put('/api/v1/profile/notes/26')
                     .send(data)
-                    .expect(200, done);
+                    .expect(302, done);
             });
         });
     });
@@ -312,9 +224,9 @@ describe('PUT requests', function () {
             };
             it('respond with 200 updated', function (done) {
                 request(app)
-                    .put('/api/v1/profile/notes/1/tags/1')
+                    .put('/api/v1/profile/notes/26/tags/6')
                     .send(data)
-                    .expect(200, done);
+                    .expect(302, done);
             });
         });
     });
@@ -331,7 +243,7 @@ describe('DELETE requests', function () {
                 request(app)
                     .delete('/api/v1/profile/delete')
                     .send(data)
-                    .expect(200, done);
+                    .expect(302, done);
             });
         });
     });
@@ -344,9 +256,9 @@ describe('DELETE requests', function () {
             };
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/profile/notes/1')
+                    .delete('/api/v1/profile/notes/25')
                     .send(data)
-                    .expect(200, done);
+                    .expect(302, done);
             });
         });
     });
@@ -359,9 +271,9 @@ describe('DELETE requests', function () {
             };
             it('respond with 200 deleted', function (done) {
                 request(app)
-                    .delete('/api/v1/profile/notes/1/tags/1')
+                    .delete('/api/v1/profile/notes/26/tags/6')
                     .send(data)
-                    .expect(200, done);
+                    .expect(302, done);
             });
         });
     });
