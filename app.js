@@ -14,7 +14,6 @@ const helmet = require('helmet');
 const {router} = require('./application/routes/index');
 const {api} = require('./application/routes/api');
 
-const config = require('./config');
 const app = express();
 
 app.set('views','./application/views');
