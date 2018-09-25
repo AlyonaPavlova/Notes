@@ -15,7 +15,6 @@ const {router} = require('./application/routes/index');
 const {api} = require('./application/routes/api');
 
 const app = express();
-const pages = require(__dirname + '/app/controllers/pages');
 
 app.set('views','./application/views');
 app.set('view options', { layout:'./application/views/layout.ejs' });
